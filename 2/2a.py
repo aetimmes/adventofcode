@@ -12,18 +12,16 @@ def main():
     data = get_data(day=DAY, year=YEAR).split("\n")
     print(f"{data=}")
 
-    SCORES = {"X": 1, "Y": 2, "Z": 3}
-
-    RESULTS = {
-        "A": {"X": 3, "Y": 6, "Z": 0},
-        "B": {"X": 0, "Y": 3, "Z": 6},
-        "C": {"X": 6, "Y": 0, "Z": 3},
-    }
+    SCORES = [1, 2, 3]
+    RESULTS = [0, 3, 6]
 
     result = 0
     for line in data:
         tokens = line.split()
-        result += SCORES[tokens[1]] + RESULTS[tokens[0]][tokens[1]]
+        i_a = ord(tokens[0]) - ord("A")
+        i_b = ord(tokens[1]) - ord("X")
+        result += SCORES[i_b]
+        result += RESULTS[(i_b - i_a + 1) % 3]
 
     print(f"{result=}")
     submit(result, part=PART, day=DAY, year=YEAR)
