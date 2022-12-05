@@ -1,0 +1,33 @@
+#!/usr/bin/python3.10
+"""2022 day 5."""
+from aocd import get_data, submit
+
+YEAR = 2022
+DAY = 5
+PART = "b"
+
+
+def main():
+    """Part b."""
+    data = get_data(day=DAY, year=YEAR)
+    print(f"{data=}")
+
+    (initial, commands) = (x.split("\n") for x in data.split("\n\n"))
+    stacks = [[] for _ in range(10)]
+    for line in initial[-2::-1]:
+        for i, box in enumerate(line[1::4]):
+            if box != " ":
+                stacks[i].append(box)
+
+    for line in commands:
+        count, source, dest = map(int, line.split()[1::2])
+        stacks[dest-1].extend(stacks[source-1][-count:])
+        del stacks[source-1][-count:]
+    result = "".join([k[-1] for k in stacks if k])
+
+    print(f"{result=}")
+    submit(result, part=PART, day=DAY, year=YEAR)
+
+
+if __name__ == "__main__":
+    main()
