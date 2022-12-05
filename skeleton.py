@@ -3,7 +3,7 @@
 from aocd import get_data, submit
 
 YEAR = 2022
-DAY = FIXME 
+DAY = FIXME
 PART = "FIXME"
 
 

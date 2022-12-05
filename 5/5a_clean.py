@@ -13,16 +13,19 @@ def main():
     print(f"{data=}")
 
     (initial, commands) = (x.split("\n") for x in data.split("\n\n"))
-    stacks = [[] for _ in range(10)]
-    for line in initial[-2::-1]:
-        for i, box in enumerate(line[1::4]):
-            if box != " ":
-                stacks[i].append(box)
+    stacks = [
+        [
+            line[i * 4 + 1]
+            for line in initial[-2::-1]
+            if i * 4 + 1 < len(line) and line[i * 4 + 1] != " "
+        ]
+        for i in range(10)
+    ]
 
     for line in commands:
         count, source, dest = map(int, line.split()[1::2])
-        stacks[dest-1].extend(stacks[source-1][-count:][::-1])
-        del stacks[source-1][-count:]
+        stacks[dest - 1].extend(stacks[source - 1][-count:][::-1])
+        del stacks[source - 1][-count:]
     result = "".join([k[-1] for k in stacks if k])
 
     print(f"{result=}")

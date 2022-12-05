@@ -23,13 +23,13 @@ def main():
             initial_lines.pop()  # get rid of unneeded line
             for i_l in initial_lines:
                 for i in range(buckets):
-                    if i_l[4*i+1] != ' ':
-                        stacks[i].insert(0, i_l[4*i+1])
+                    if i_l[4 * i + 1] != " ":
+                        stacks[i].insert(0, i_l[4 * i + 1])
             print(f"{stacks=}")
             initialized = True
         else:
             tokens = line.split()
-            count, source, dest = int(tokens[1]), int(tokens[3])-1, int(tokens[5])-1
+            count, source, dest = int(tokens[1]), int(tokens[3]) - 1, int(tokens[5]) - 1
             temp = []
             for _ in range(count):
                 temp.append(stacks[source].pop())
