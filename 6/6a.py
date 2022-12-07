@@ -15,15 +15,14 @@ def main():
 
     m = {}
     for i in range(len(data)):
-        if len(m.items())==4:
+        if len(m.items()) == 4:
             result = i
             break
-        m[data[i]] = m.get(data[i],0) + 1
-        if i-4 >= 0:
-            m[data[i-4]] -= 1
-            if m[data[i-4]] == 0:
-                del m[data[i-4]]
-    
+        m[data[i]] = m.get(data[i], 0) + 1
+        if i - 4 >= 0:
+            m[data[i - 4]] -= 1
+            if m[data[i - 4]] == 0:
+                del m[data[i - 4]]
 
     print(f"{result=}")
     submit(result, part=PART, day=DAY, year=YEAR)
