@@ -11,11 +11,13 @@ class Dir:
     """Directory."""
 
     def __init__(self, path: str):
+        """Initialize."""
         self.path = path
         self.subdirs: list[Dir] = []
         self.size = 0
 
     def total_size(self) -> int:
+        """Get total size of this and subdirs."""
         return self.size + sum([sd.total_size() for sd in self.subdirs])
 
 

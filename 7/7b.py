@@ -12,7 +12,7 @@ class Dir:
     """Directory structure."""
 
     def __init__(self, path: str):
-        """Initializer."""
+        """Initialize."""
         self.path = path
         self.subdirs: list[Dir] = []
         self.size = 0
