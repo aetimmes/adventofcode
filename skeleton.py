@@ -1,6 +1,7 @@
 #!/usr/bin/python3.10
 """2022 day FIXME."""
 from aocd import get_data, submit
+from aocd.transforms import lines
 
 YEAR = 2022
 DAY = FIXME
@@ -9,7 +10,7 @@ PART = "FIXME"
 
 def main():
     """Part FIXME."""
-    data = get_data(day=DAY, year=YEAR).split("\n")
+    data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
     result = 0
