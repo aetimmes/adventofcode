@@ -1,7 +1,7 @@
 #!/usr/bin/python3.10
 """2022 day 13."""
 import bisect
-import copy
+from itertools import zip_longest
 import json
 
 from aocd import get_data, submit
@@ -20,53 +20,45 @@ class Packet:
 
     def __le__(self, other):
         """Le override."""
-        return Packet.cmp(self.val, other.val) in [0, 1]
+        return Packet.cmp(self.val, other.val) >= 0
 
     def __ge__(self, other):
         """Ge override."""
-        return Packet.cmp(self.val, other.val) in [0, -1]
+        return Packet.cmp(self.val, other.val) <= 0
 
     def __lt__(self, other):
         """Lt override."""
-        return Packet.cmp(self.val, other.val) == 1
+        return Packet.cmp(self.val, other.val) > 0
 
     def __gt__(self, other):
         """Gt override."""
-        return Packet.cmp(self.val, other.val) == -1
+        return Packet.cmp(self.val, other.val) < 0
 
     def __eq__(self, other):
         """Eq override."""
         return Packet.cmp(self.val, other.val) == 0
 
     @staticmethod
-    def cmp(x, y) -> int:
+    def cmp(left, right) -> int:
         """Compare two Packets, potentially recursively."""
-        a = copy.deepcopy(x)
-        b = copy.deepcopy(y)
-        if isinstance(a, int):
-            if isinstance(b, int):
-                if a == b:
-                    return 0
-                elif a < b:
-                    return 1
-                else:
-                    return -1
+        if isinstance(left, int):
+            if isinstance(right, int):
+                return right - left
             else:
-                return Packet.cmp([a], b)
+                return Packet.cmp([left], right)
         else:
-            if isinstance(b, int):
-                return Packet.cmp(a, [b])
+            if isinstance(right, int):
+                return Packet.cmp(left, [right])
             else:
-                while a and b:
-                    rc = Packet.cmp(a.pop(0), b.pop(0))
+                for (l, r) in zip_longest(left, right, fillvalue=None):
+                    if l is None and r is not None:
+                        return 1
+                    if l is not None and r is None:
+                        return -1
+                    rc = Packet.cmp(l, r)
                     if rc != 0:
                         return rc
-                if a:
-                    return -1
-                elif not a and not b:
-                    return 0
-                else:
-                    return 1
+                return 0
 
 
 def main():

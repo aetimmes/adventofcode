@@ -1,6 +1,7 @@
 #!/usr/bin/python3.10
 """2022 day 13."""
 import json
+from itertools import zip_longest
 
 from aocd import get_data, submit
 
@@ -13,27 +14,22 @@ def cmp(left, right):
     """Compare two elements, potentially recursively."""
     if isinstance(left, int):
         if isinstance(right, int):
-            if left == right:
-                return 0
-            elif left < right:
-                return 1
-            else:
-                return -1
+            return right - left
         else:
             return cmp([left], right)
     else:
         if isinstance(right, int):
             return cmp(left, [right])
         else:
-            while left and right:
-                return_code = cmp(left.pop(0), right.pop(0))
-                if return_code != 0:
-                    return return_code
-            if left:
-                return -1
-            if not left and not right:
-                return 0
-    return 1
+            for (l, r) in zip_longest(left, right, fillvalue=None):
+                if l is None and r is not None:
+                    return 1
+                if l is not None and r is None:
+                    return -1
+                rc = cmp(l, r)
+                if rc != 0:
+                    return rc
+            return 0
 
 
 def main():
@@ -45,7 +41,7 @@ def main():
     for i, chunk in enumerate(data):
         (left, right) = [json.loads(s) for s in chunk.split("\n")]
         return_code = cmp(left, right)
-        if return_code == 1:
+        if return_code > 0:
             result += i + 1
     print(f"{result=}")
     submit(result, part=PART, day=DAY, year=YEAR)
