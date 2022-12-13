@@ -13,12 +13,13 @@ def main():
     print(f"{data=}")
     print(f"{len(data)=}")
 
-    m = {}
-    for i in range(len(data)):
+    m: dict[str, int] = {}
+    result = ""
+    for i, elem in enumerate(data):
         if len(m.items()) == 4:
             result = i
             break
-        m[data[i]] = m.get(data[i], 0) + 1
+        m[elem] = m.get(elem, 0) + 1
         if i - 4 >= 0:
             m[data[i - 4]] -= 1
             if m[data[i - 4]] == 0:

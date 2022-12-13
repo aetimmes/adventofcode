@@ -1,8 +1,9 @@
 #!/usr/bin/python3.10
 """2022 day 12."""
+import sys
+
 from aocd import get_data, submit
 from aocd.transforms import lines
-import sys
 
 YEAR = 2022
 DAY = 12
@@ -10,6 +11,7 @@ PART = "b"
 
 
 def bounds_check(r, c, nr, nc):
+    """Check bounds of 2d grid."""
     return r >= 0 and r < nr and c >= 0 and c < nc
 
 
@@ -18,8 +20,6 @@ def main():
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
-    start = (-1, -1)
-
     nr = len(data)
     nc = len(data[0])
 
@@ -27,15 +27,15 @@ def main():
     heights = [
         [ord(c) - ord("a") if c not in "SE" else 0 for c in line] for line in data
     ]
+    end: tuple[int, int] = (-1, -1)
     for r, line in enumerate(data):
         for c, char in enumerate(line):
-            if char == "S":
-                start = [r, c]
             if char == "E":
-                end = [r, c]
+                end = (r, c)
     steps[end[0]][end[1]] = 0
     q = [end]
-    seen = set(tuple(end))
+    seen: set[tuple[int, int]] = set()
+    seen.add(end)
     while q:
         r, c = q.pop(0)
         for dr, dc in [[1, 0], [0, 1], [-1, 0], [0, -1]]:
@@ -50,10 +50,7 @@ def main():
                         submit(result, part=PART, day=DAY, year=YEAR)
                         return
                     steps[r + dr][c + dc] = steps[r][c] + 1
-                    q.append([r + dr, c + dc])
-                    print(
-                        f"stepping from {[r,c]} to {[r+dr,c+dc]} with {steps[r+dr][c+dc]} steps"
-                    )
+                    q.append((r + dr, c + dc))
                     seen.add((r + dr, c + dc))
 
 
