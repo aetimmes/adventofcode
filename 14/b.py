@@ -7,7 +7,7 @@ from aocd.transforms import lines
 
 YEAR = 2022
 DAY = 14
-PART = "a"
+PART = "b"
 
 
 def draw_line(sr, sc, er, ec, grid):
@@ -32,7 +32,7 @@ def print_graph(grid, min_c, max_c, abyss_level):
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
@@ -59,11 +59,13 @@ def main():
             if max_c < cc:
                 max_c = cc
 
+    grid[abyss_level] = ["#" for _ in grid[abyss_level]]
+
     result = 0
     for i in range(sys.maxsize):
         cr, cc = 0, 500
         while True:
-            if cr > abyss_level:
+            if grid[0][500] == "x":
                 break
             elif grid[cr + 1][cc] == ".":
                 cr += 1
@@ -76,8 +78,8 @@ def main():
             else:
                 grid[cr][cc] = "x"
                 break
-        if cr > abyss_level:
-            result = i
+        if grid[0][500] == "x":
+            result = i + 1
             break
 
     print(print_graph(grid, min_c, max_c, abyss_level))
