@@ -44,15 +44,12 @@ def main():
     max_c = 0
 
     for line in data:
-        cr, cc = None, None
         tokens = line.split(" -> ")
+        (cc, cr) = map(int, tokens.pop(0).split(","))
         for token in tokens:
-            if not cr:
-                (cc, cr) = map(int, token.split(","))
-            else:
-                (nc, nr) = map(int, token.split(","))
-                grid = draw_line(cr, cc, nr, nc, grid)
-                cr, cc = nr, nc
+            (nc, nr) = map(int, token.split(","))
+            grid = draw_line(cr, cc, nr, nc, grid)
+            cr, cc = nr, nc
             abyss_level = max(cr + 2, abyss_level)
             if cc < min_c:
                 min_c = cc
