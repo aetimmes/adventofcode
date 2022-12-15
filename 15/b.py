@@ -48,7 +48,7 @@ def main():
     # 8
     # 9
     #    we want to start at x +/- (mhd+1), y and iterate (mhd+1) times per side
-
+    finalists = set()
     for (sx, sy), mhd in sensors.items():
         for i in range(mhd + 2):
             d1, d2 = i, (mhd + 1 - i)
@@ -57,14 +57,19 @@ def main():
                 for s2 in [1, -1]:
                     t = (sx + (d1 * s1), sy + (d2 * s2))
                     candidates[t] = candidates.get(t, 0) + 1
-
+                    if candidates[t] >=4:
+                        finalists.add(t)
+                        
     result = -1
 
-    for cx, cy in sorted(candidates, key=lambda x: candidates[x], reverse=True):
+    print(f"{len(finalists)=}")
+
+    for cx, cy in finalists:
         failed = False
         for (sx, sy), mhd in sensors.items():
             if not failed and mh_dist(cx, cy, sx, sy) <= mhd:
                 failed = True
+                break
         if not failed:
             result = 4_000_000 * cx + cy
             break
