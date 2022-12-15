@@ -1,5 +1,5 @@
 #!/usr/bin/python3.10
-"""2022 day FIXME."""
+"""2022 day 15."""
 from aocd import get_data, submit
 from aocd.transforms import lines
 
