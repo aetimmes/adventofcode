@@ -59,7 +59,7 @@ def main():
                     candidates[t] = candidates.get(t, 0) + 1
                     if candidates[t] >=4:
                         finalists.add(t)
-                        
+
     result = -1
 
     print(f"{len(finalists)=}")
