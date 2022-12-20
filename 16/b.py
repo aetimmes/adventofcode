@@ -1,10 +1,7 @@
 #!/usr/bin/python3.10
 """2022 day 16."""
 from collections import defaultdict
-import copy
-from itertools import permutations
 from pprint import pprint
-import sys
 from aocd import get_data, submit
 from aocd.transforms import lines
 
@@ -29,7 +26,7 @@ TIME_LIMIT = 26
 def main():
     """Part b."""
     data = lines(get_data(day=DAY, year=YEAR))
-    # data = DATA.splitlines()
+    # data = lines(DATA)
     print(f"{data=}")
 
     flow_rates = {}
@@ -43,7 +40,7 @@ def main():
 
     distances = defaultdict(dict)
 
-    working_valves: set[str] = {v for v in flow_rates if flow_rates[v] > 0}
+    working_valves: set[str] = {k for k, v in flow_rates.items() if v > 0}
     working_valves.add("AA")
 
     for v in working_valves:
@@ -68,105 +65,39 @@ def main():
             t += 1
 
     pprint(distances)
-
-    result: tuple[int, ...] = (0,)
     if flow_rates["AA"] == 0:
         working_valves.remove("AA")
+    result = 0
 
-    # loc, open valves, time
+    def descent(person, elephant, valves):
+        results = []
+        for target in [person, elephant]:
+            (cloc, ctime, score) = target[-1]
+            for valve in valves:
+                ptime = ctime + distances[cloc][valve] + 1
+                if ptime <= TIME_LIMIT:
+                    valves.remove(valve)
+                    target.append(
+                        (
+                            valve,
+                            ptime,
+                            score + (flow_rates[valve] * (TIME_LIMIT - ptime)),
+                        )
+                    )
+                    results.append(descent(person, elephant, valves))
+                    target.pop()
+                    valves.add(valve)
+        if not results:
+            return person[-1][-1] + elephant[-1][-1]
+        return max(results)
 
-    dfs: list[
-        tuple[
-            tuple[str, str],
-            tuple[int, int],
-            int,
-            tuple[int, ...],
-            set[str],
-            tuple[tuple[str, ...], tuple[str, ...]],
-        ]
-    ] = [(("AA", "AA"), (-1, -1), 0, (0,), set(), (tuple(), tuple()))]
-    winning_paths = []
+    person = [("AA", 0, 0)]
+    elephant = [("AA", 0, 0)]
 
-    while dfs:
-        elem = dfs.pop(0)
-        (destinations, travel_times, time, scores, ovs, paths) = elem
-        open_valves = copy.deepcopy(ovs)
-        increment = sum(flow_rates[l] for l in open_valves)
-
-        while time < TIME_LIMIT and all(tt > 0 for tt in travel_times):
-            scores = scores + (scores[-1] + increment,)
-            time += 1
-            travel_times = tuple([tt - 1 for tt in travel_times])
-
-        if len(scores) != time + 1:
-            print(f"broken {elem=}")
-
-        if time >= TIME_LIMIT:
-            if scores[-1] > result[-1]:
-                result = scores
-                winning_paths = paths
-            continue
-
-        if any(
-            tt == 0 and destinations[i] in working_valves
-            for i, tt in enumerate(travel_times)
-        ):
-            scores = scores + (scores[-1] + increment,)
-            time += 1
-            travel_times = tuple([tt - 1 for tt in travel_times])
-            for i in [0, 1]:
-                if travel_times[i] == -1:
-                    open_valves.add(destinations[i])
-            if time >= TIME_LIMIT:
-                if scores[-1] > result[-1]:
-                    winning_paths = paths
-                    result = scores
-                continue
-
-        potential_distances = [
-            distances[a][b]
-            for i, a in enumerate(destinations)
-            if travel_times[i] == -1
-            for b in working_valves
-            if b not in open_valves and b not in destinations and b != a
-        ]
-
-        min_dist = min(potential_distances + [sys.maxsize])
-
-        if time + min_dist > TIME_LIMIT:
-            tts = list(travel_times)
-            ds = list(destinations)
-            for i in [0, 1]:
-                if tts[i] == -1:
-                    tts[i] = 99
-                    ds[i] = "waiting"
-            dfs.insert(0, (tuple(ds), tuple(tts), time, scores, open_valves, paths))
-
-        else:
-            for p in permutations(
-                [d for d in working_valves if d not in open_valves], 2
-            ):
-                tts = list(travel_times)
-                ds = list(destinations)
-                ps = []
-                for i in [0, 1]:
-                    if tts[i] == -1:
-                        tts[i] = distances[ds[i]][p[i]]
-                        ds[i] = p[i]
-                        ps.append(paths[i] + (p[i],))
-                    else:
-                        ps.append(paths[i])
-                dfs.append(
-                    (tuple(ds), tuple(tts), time, scores, open_valves, tuple(ps))
-                )
+    result = descent(person, elephant, working_valves)
 
     print(f"{result=}")
-    print(f"{len(result)=}")
-    print(f"{winning_paths=}")
-    print(f"{len(winning_paths)=}")
-
-    if len(result) == 31:
-        submit(result[-1], part=PART, day=DAY, year=YEAR)
+    submit(result, part=PART, day=DAY, year=YEAR)
 
 
 if __name__ == "__main__":
