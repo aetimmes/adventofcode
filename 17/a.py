@@ -1,7 +1,6 @@
-#!/usr/bin/python3.10
+#!/usr/bin/python3.11
 """2022 day 17."""
 from aocd import get_data, submit
-from aocd.transforms import lines
 
 YEAR = 2022
 DAY = 17
@@ -18,16 +17,13 @@ square = ((0, 0), (1, 0), (0, 1), (1, 1))
 
 pieces = [flat, plus, el, eye, square]
 
-n_p = len(pieces)
+num_pieces = len(pieces)
 
 delta = {"<": -1, ">": 1}
-
-DATA = ">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>"
 
 def main():
     """Part a."""
     data = get_data(day=DAY, year=YEAR)
-    #data = DATA
     print(f"{data=}")
 
     n_d = len(data)
@@ -42,7 +38,7 @@ def main():
     t = 0
 
     for i in range(2022):
-        current_piece = [[r + result + 4, c + 2] for r, c in pieces[i % n_p]]
+        current_piece = [[r + result + 4, c + 2] for r, c in pieces[i % num_pieces]]
         while True:
             d = delta[data[t % n_d]]
             if all(bounds_check(r, c + d) for r, c in current_piece):

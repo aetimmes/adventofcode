@@ -1,7 +1,6 @@
-#!/usr/bin/python3.10
+#!/usr/bin/python3.11
 """2022 day 17."""
 from aocd import get_data, submit
-from aocd.transforms import lines
 
 YEAR = 2022
 DAY = 17
@@ -24,13 +23,10 @@ delta = {"<": -1, ">": 1}
 
 num_steps = 1000000000000
 
-DATA = ">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>"
-
 
 def main():
     """Part b."""
-    # data = get_data(day=DAY, year=YEAR)
-    data = DATA
+    data = get_data(day=DAY, year=YEAR)
     print(f"{data=}")
 
     data_len = len(data)
@@ -46,9 +42,9 @@ def main():
 
     end_state_map = {}
 
+    cycle_start, cycle_end, cycle_length, cycle_height = -1, -1, -1, -1
+
     for i in range(num_steps):
-        if i > 0 and i % num_pieces == 0 and t % data_len == 0:
-            break
         current_piece = [
             [r + max_heights[-1] + 4, c + 2] for r, c in pieces[i % num_pieces]
         ]
@@ -56,8 +52,8 @@ def main():
         cycle_found = False
         while not cycle_found:
             d = delta[data[t % data_len]]
-            delta_sum += d
             if all(bounds_check(r, c + d) for r, c in current_piece):
+                delta_sum += d
                 for rock in current_piece:
                     rock[1] += d
             t += 1
@@ -72,20 +68,26 @@ def main():
                 x = (i % num_pieces, t % data_len, delta_sum)
                 if x in end_state_map:
                     cycle_start, cycle_end = end_state_map[x][0], i
+                    cycle_length = cycle_end - cycle_start
                     cycle_height = max_heights[-1] - end_state_map[x][1]
                     cycle_found = True
                 else:
                     end_state_map[x] = (i, max_heights[-1])
                 break
+        if cycle_found:
+            break
 
-    cycle_length = cycle_end - cycle_start
+    result = max_heights[-1]
 
     num_cycles = (num_steps - cycle_end) // cycle_length
-
-    result += max_heights[leftover_cycles + 1]
+    result += cycle_height * num_cycles
+    leftover_cycles = (num_steps - cycle_end) % cycle_length
+    result += (
+        max_heights[cycle_start + leftover_cycles + 1] - max_heights[cycle_start + 1]
+    )
 
     print(f"{result=}")
-    # submit(result, part=PART, day=DAY, year=YEAR)
+    submit(result, part=PART, day=DAY, year=YEAR)
 
 
 if __name__ == "__main__":

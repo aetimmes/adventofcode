@@ -1,4 +1,4 @@
-#!/usr/bin/python3.10
+#!/usr/bin/python3.11
 """2022 day FIXME."""
 from aocd import get_data, submit
 from aocd.transforms import lines
