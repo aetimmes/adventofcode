@@ -1,9 +1,9 @@
 #!/usr/bin/python3.10
 """2022 day 16."""
-from collections import defaultdict
-import copy
-from pprint import pprint
 import sys
+from collections import defaultdict
+from pprint import pprint
+
 from aocd import get_data, submit
 from aocd.transforms import lines
 
@@ -11,22 +11,10 @@ YEAR = 2022
 DAY = 16
 PART = "a"
 
-DATA = """Valve AA has flow rate=0; tunnels lead to valves DD, II, BB
-Valve BB has flow rate=13; tunnels lead to valves CC, AA
-Valve CC has flow rate=2; tunnels lead to valves DD, BB
-Valve DD has flow rate=20; tunnels lead to valves CC, AA, EE
-Valve EE has flow rate=3; tunnels lead to valves FF, DD
-Valve FF has flow rate=0; tunnels lead to valves EE, GG
-Valve GG has flow rate=0; tunnels lead to valves FF, HH
-Valve HH has flow rate=22; tunnel leads to valve GG
-Valve II has flow rate=0; tunnels lead to valves AA, JJ
-Valve JJ has flow rate=21; tunnel leads to valve II"""
-
 
 def main():
     """Part a."""
     data = lines(get_data(day=DAY, year=YEAR))
-    #data = DATA.splitlines()
     print(f"{data=}")
 
     flow_rates = {}
@@ -91,7 +79,9 @@ def main():
             result = scores
             winning_path = path
         if loc in working_valves and loc not in open_valves:
-            dfs.insert(0, (loc, open_valves | {loc}, t + 1, scores + tuple(), path + (loc,)))
+            dfs.insert(
+                0, (loc, open_valves | {loc}, t + 1, scores + tuple(), path + (loc,))
+            )
             continue
 
         if (
