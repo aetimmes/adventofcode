@@ -48,6 +48,7 @@ def main():
     # 8
     # 9
     #    we want to start at x +/- (mhd+1), y and iterate (mhd+1) times per side
+
     finalists = set()
     for (sx, sy), mhd in sensors.items():
         for i in range(mhd + 2):
@@ -57,7 +58,7 @@ def main():
                 for s2 in [1, -1]:
                     t = (sx + (d1 * s1), sy + (d2 * s2))
                     candidates[t] = candidates.get(t, 0) + 1
-                    if candidates[t] >=4:
+                    if candidates[t] >= 4:
                         finalists.add(t)
 
     result = -1

@@ -28,7 +28,7 @@ def main():
 
     distances = defaultdict(dict)
 
-    working_valves: set[str] = {v for v in flow_rates if flow_rates[v] > 0}
+    working_valves: set[str] = {k for k, v in flow_rates.items() if v > 0}
     working_valves.add("AA")
 
     for v in working_valves:
@@ -71,7 +71,7 @@ def main():
 
         if len(scores) != t + 1:
             print(f"broken {elem=}")
-        increment = sum(flow_rates[l] for l in open_valves)
+        increment = sum(flow_rates[v] for v in open_valves)
         scores = scores + (scores[-1] + increment,)
         if t >= 30:
             continue

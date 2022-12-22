@@ -20,7 +20,7 @@ def main():
     result = 0
     for line in data:
         t_1 = set(line[: len(line) // 2])
-        for c in line[len(line) // 2 :]:
+        for c in line[len(line) // 2:]:
             if c in t_1:
                 result += point_map[c]
                 break

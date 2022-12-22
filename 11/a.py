@@ -8,7 +8,10 @@ PART = "a"
 
 
 class Monkey:
+    """A monkey."""
+
     def __init__(self, items, op1, op2, condition, tdest, fdest):
+        """Initialize."""
         self.items = items
         self.op1 = op1
         self.op2 = op2

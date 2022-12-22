@@ -39,6 +39,7 @@ def main():
 
 
 def helper(head, tail):
+    """Calculate movement for head/tail."""
     hr, hc = head
     tr, tc = tail
     if abs(hr - tr) == 2 or abs(hc - tc) == 2:

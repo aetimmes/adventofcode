@@ -27,7 +27,7 @@ def print_graph(grid, min_c, max_c, abyss_level):
     """Print the graph."""
     result = ""
     for r in range(0, abyss_level + 6):
-        result += "".join(grid[r][min_c - 10 : max_c + 10]) + "\n"
+        result += "".join(grid[r][min_c - 10:max_c + 10]) + "\n"
     return result
 
 

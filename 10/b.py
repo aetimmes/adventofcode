@@ -13,7 +13,7 @@ def main():
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
-    result = "#" # first pixel is lit
+    result = "#"  # first pixel is lit
     x = 1
     ic = 0
 
@@ -28,7 +28,7 @@ def main():
             line = data.pop(0)
             if line != "noop":
                 pending = int(line.split()[1])
-        if abs(ic%40 - x) <= 1:
+        if abs(ic % 40 - x) <= 1:
             result += "#"
         else:
             result += "."

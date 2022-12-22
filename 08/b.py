@@ -13,8 +13,8 @@ def main():
     print(f"{data=}")
     nr, nc = len(data), len(data[0])
     result = 0
-    for r in range(len(data)):
-        for c in range(len(data[0])):
+    for r, _ in enumerate(data):
+        for c, _ in enumerate(data[0]):
             score = 1
             for dr, dc in [[1, 0], [0, 1], [-1, 0], [0, -1]]:
                 cr, cc = r, c
@@ -35,6 +35,7 @@ def main():
 
 
 def bounds_check(r, c, nr, nc):
+    """Check bounds of 2d grid."""
     return r >= 0 and r < nr and c >= 0 and c < nc
 
 

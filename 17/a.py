@@ -21,6 +21,7 @@ num_pieces = len(pieces)
 
 delta = {"<": -1, ">": 1}
 
+
 def main():
     """Part a."""
     data = get_data(day=DAY, year=YEAR)
