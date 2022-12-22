@@ -76,8 +76,7 @@ def main():
             break
 
     print(f"{result=}")
-    if result is not -1:
-        submit(result, part=PART, day=DAY, year=YEAR)
+    submit(result, part=PART, day=DAY, year=YEAR)
 
 
 if __name__ == "__main__":
