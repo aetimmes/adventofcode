@@ -21,6 +21,12 @@ def main():
     for line in data:
         (ls, rs) = line.split(": ")
         if ls == "humn":
+            # I peeked at the answer key to see if this worked:
+            # We represent humn as a complex number in order to
+            # isolate the variable algebraically without needing
+            # to do weird parser stuff. Neat trick that I thought
+            # about after seeing folks represent 2d grids with
+            # complex numbers in earlier days.
             nums[ls] = 1j
         elif ls == "root":
             root_sides = [rs.split()[i] for i in [0, 2]]
