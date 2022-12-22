@@ -5,11 +5,11 @@ from aocd.transforms import lines
 
 YEAR = 2022
 DAY = 21
-PART = "a"
+PART = "b"
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
@@ -17,9 +17,14 @@ def main():
 
     nums = {}
     ops = {}
+    root_sides = []
     for line in data:
         (ls, rs) = line.split(": ")
-        if len(rs.split()) == 1:
+        if ls == "humn":
+            nums[ls] = 1j
+        elif ls == "root":
+            root_sides = [rs.split()[i] for i in [0, 2]]
+        elif len(rs.split()) == 1:
             nums[ls] = int(rs)
         else:
             ops[ls] = rs
@@ -33,7 +38,9 @@ def main():
                 )
                 del ops[k]
 
-    result = nums["root"]
+    a, b = (nums[root_sides[0]], nums[root_sides[1]])
+    a, b = (b, a) if not a.imag else (a, b)
+    result = round((b - a.real) / a.imag)
     print(f"{result=}")
     submit(result, part=PART, day=DAY, year=YEAR)
 

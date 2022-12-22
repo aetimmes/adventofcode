@@ -1,6 +1,7 @@
 #!/usr/bin/python3.10
 """2022 day 18."""
 from itertools import chain
+
 from aocd import get_data, submit
 from aocd.transforms import lines
 
@@ -27,7 +28,7 @@ def main():
 
     elems = set()
     for line in data:
-        elems.add(eval(line)) # pylint: disable=eval-used
+        elems.add(eval(line))  # pylint: disable=eval-used
 
     result = 0
 
