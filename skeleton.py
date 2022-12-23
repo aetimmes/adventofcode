@@ -4,7 +4,7 @@ from aocd import get_data, submit
 from aocd.transforms import lines
 
 YEAR = 2022
-DAY = FIXME
+DAY = -1  # FIX ME
 PART = "a"
 
 
