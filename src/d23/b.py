@@ -6,7 +6,7 @@ from aocd.transforms import lines
 
 YEAR = 2022
 DAY = 23
-PART = "a"
+PART = "b"
 
 # (r, c) format, (0, 0) is top-left
 
@@ -25,7 +25,7 @@ directions = {
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
@@ -35,8 +35,8 @@ def main():
             if char == "#":
                 elves.add((r, c))
     num_elves = len(elves)
-    for i in range(10):
-        print(f"turn {i+1}:")
+    i = 0
+    while True:
         proposals = defaultdict(set)
         r_proposals = {}
         for (r, c) in elves:
@@ -52,6 +52,8 @@ def main():
                     proposals[(r + directions[d][0], c + directions[d][1])].add((r, c))
                     r_proposals[(r, c)] = (r + directions[d][0], c + directions[d][1])
                     break
+        if len(proposals) == 0:
+            break
         for (r, c) in list(elves):
             if proposals.get(r_proposals.get((r, c))) == {(r, c)}:
                 elves.remove((r, c))
@@ -65,12 +67,9 @@ def main():
                     f"Elf count mismatch: expected {num_elves}, got {len(elves)}"
                 )
         print_grid(elves)
+        i += 1
 
-    result = 1
-    for i in [0, 1]:
-        result *= abs(max(e[i] for e in elves) - min(e[i] for e in elves)) + 1
-
-    result -= num_elves
+    result = i+1
 
     print(f"{result=}")
     submit(result, part=PART, day=DAY, year=YEAR)
