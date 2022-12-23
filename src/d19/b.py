@@ -6,9 +6,9 @@ from numpy import array
 
 YEAR = 2022
 DAY = 19
-PART = "a"
+PART = "b"
 
-TIME_LIMIT = 24
+TIME_LIMIT = 32
 
 
 def sort_q(x):
@@ -18,15 +18,13 @@ def sort_q(x):
 
 def main():
     """
-    Part a.
+    Part b.
 
     Methodology heavily inspired by
     https://old.reddit.com/r/adventofcode/comments/zpihwi/2022_day_19_solutions/j0tvzgz/
     """
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
-
-    result = 0
 
     blueprints = [
         [int(line.split()[j]) for j in [6, 12, 18, 21, 27, 30]] for line in data
@@ -62,10 +60,11 @@ def main():
             q = temp
         return max(e[0][-1] for e in q)
 
-    for i, blueprint in enumerate(blueprints):
+    result = 1
+    for i, blueprint in enumerate(blueprints[:3]):
         current = sim_blueprint(blueprint)
         print(f"Blueprint {i}: {current}, quality level: {(i+1)*current}")
-        result += (i + 1) * current
+        result *= current
     print(f"{result=}")
     submit(int(result), part=PART, day=DAY, year=YEAR)
 
