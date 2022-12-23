@@ -29,11 +29,7 @@ def main():
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
-    elves = set()
-    for r, line in enumerate(data):
-        for c, char in enumerate(line):
-            if char == "#":
-                elves.add((r, c))
+    elves = parse_elves(data)
     num_elves = len(elves)
     for i in range(10):
         print(f"turn {i+1}:")
@@ -55,15 +51,7 @@ def main():
         for (r, c) in list(elves):
             if proposals.get(r_proposals.get((r, c))) == {(r, c)}:
                 elves.remove((r, c))
-                if r_proposals[(r, c)] in elves:
-                    raise ValueError(
-                        f"Trying to add duplicate elf at {r_proposals[(r, c)]}"
-                    )
                 elves.add(r_proposals[(r, c)])
-            if len(elves) != num_elves:
-                raise ValueError(
-                    f"Elf count mismatch: expected {num_elves}, got {len(elves)}"
-                )
         print_grid(elves)
 
     result = 1
@@ -74,6 +62,16 @@ def main():
 
     print(f"{result=}")
     submit(result, part=PART, day=DAY, year=YEAR)
+
+
+def parse_elves(data):
+    """Parse elves."""
+    elves = set()
+    for r, line in enumerate(data):
+        for c, char in enumerate(line):
+            if char == "#":
+                elves.add((r, c))
+    return elves
 
 
 def print_grid(elves):
