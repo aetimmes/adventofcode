@@ -51,10 +51,8 @@ def main():
             grid = draw_line(cr, cc, nr, nc, grid)
             cr, cc = nr, nc
             abyss_level = max(cr + 2, abyss_level)
-            if cc < min_c:
-                min_c = cc
-            if max_c < cc:
-                max_c = cc
+            min_c = cc if cc < min_c else min_c
+            max_c = cc if max_c < cc else max_c
 
     result = 0
     for i in range(sys.maxsize):
@@ -62,7 +60,7 @@ def main():
         while True:
             if cr > abyss_level:
                 break
-            elif grid[cr + 1][cc] == ".":
+            if grid[cr + 1][cc] == ".":
                 cr += 1
             elif grid[cr + 1][cc - 1] == ".":
                 cr += 1

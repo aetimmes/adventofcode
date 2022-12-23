@@ -17,14 +17,55 @@ def main():
     """Part a."""
     data = get_data(day=DAY, year=YEAR)
 
+    grid, instructions, open_tiles, walls, position, facing = parse_input(data)
+
+    result = 0
+
+    def process_steps(position, facing, steps):
+        """Take a walk on a monkey forcefield."""
+        max_r = len(grid)
+        max_c = max(len(line) for line in grid)
+
+        for _ in range(steps):
+            temp = (
+                (position[0] + deltas[facing][0]) % max_r,
+                (position[1] + deltas[facing][1]) % max_c,
+            )
+            while temp not in open_tiles and temp not in walls:
+                temp = (
+                    (temp[0] + deltas[facing][0]) % max_r,
+                    (temp[1] + deltas[facing][1]) % max_c,
+                )
+            if temp in open_tiles:
+                position = temp
+            if temp in walls:
+                break
+        return position
+
+    current = ""
+    for c in instructions:
+        if c in ["L", "R"]:
+            position = process_steps(position, facing, int(current))
+            facing = process_facing(facing, c)
+            current = ""
+        else:
+            current += c
+
+    if current:
+        position = process_steps(position, facing, int(current))
+
+    result = ((position[0] + 1) * 1000) + ((position[1] + 1) * 4) + facing
+    print(f"{result=}")
+    submit(result, part=PART, day=DAY, year=YEAR)
+
+
+def parse_input(data):
+    """Parse input."""
     grid, instructions = data.split("\n\n")
     print(grid)
     grid = lines(grid)
     open_tiles = set()
     walls = set()
-
-    max_r = len(grid)
-    max_c = max(len(line) for line in grid)
 
     position: tuple[int, int] = (0, grid[0].index("."))
     facing: int = 0
@@ -35,48 +76,7 @@ def main():
                 open_tiles.add((r, c))
             elif char == "#":
                 walls.add((r, c))
-
-    result = 0
-
-    current = ""
-    for c in instructions:
-        if c in ["L", "R"]:
-            position = process_steps(
-                open_tiles, walls, max_r, max_c, position, facing, current
-            )
-            facing = process_facing(facing, c)
-            current = ""
-        else:
-            current += c
-
-    if current:
-        position = process_steps(
-            open_tiles, walls, max_r, max_c, position, facing, current
-        )
-
-    result = ((position[0] + 1) * 1000) + ((position[1] + 1) * 4) + facing
-    print(f"{result=}")
-    submit(result, part=PART, day=DAY, year=YEAR)
-
-
-def process_steps(open_tiles, walls, max_r, max_c, position, facing, current):
-    """Take a walk on a monkey forcefield."""
-    steps = int(current)
-    for _ in range(steps):
-        temp = (
-            (position[0] + deltas[facing][0]) % max_r,
-            (position[1] + deltas[facing][1]) % max_c,
-        )
-        while temp not in open_tiles and temp not in walls:
-            temp = (
-                (temp[0] + deltas[facing][0]) % max_r,
-                (temp[1] + deltas[facing][1]) % max_c,
-            )
-        if temp in open_tiles:
-            position = temp
-        if temp in walls:
-            break
-    return position
+    return grid, instructions, open_tiles, walls, position, facing
 
 
 def process_facing(facing, c):

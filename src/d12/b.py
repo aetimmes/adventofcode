@@ -12,7 +12,7 @@ PART = "b"
 
 def bounds_check(r, c, nr, nc):
     """Check bounds of 2d grid."""
-    return r >= 0 and r < nr and c >= 0 and c < nc
+    return 0 <= r < nr and 0 <= c < nc
 
 
 def main():

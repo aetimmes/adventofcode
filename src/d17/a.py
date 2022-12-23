@@ -32,7 +32,7 @@ def main():
     rocks = set()
 
     def bounds_check(r, c):
-        return r >= 0 and c >= 0 and c < 7 and (r, c) not in rocks
+        return r >= 0 and 0 <= c < 7 and (r, c) not in rocks
 
     result = -1
 

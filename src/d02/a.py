@@ -6,14 +6,14 @@ YEAR = 2022
 DAY = 2
 PART = "a"
 
+SCORES = [1, 2, 3]
+RESULTS = [0, 3, 6]
+
 
 def main():
     """Part a."""
     data = get_data(day=DAY, year=YEAR).split("\n")
     print(f"{data=}")
-
-    SCORES = [1, 2, 3]
-    RESULTS = [0, 3, 6]
 
     result = 0
     for line in data:

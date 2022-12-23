@@ -22,7 +22,7 @@ def main():
     for line in data:
         current.append(line)
         if len(current) == 3:
-            sets = [set([c for c in t]) for t in current]
+            sets = [set(t) for t in current]
             for i in sets[0]:
                 if i in sets[1] and i in sets[2]:
                     result += m[i]

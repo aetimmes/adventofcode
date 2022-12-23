@@ -10,14 +10,12 @@ PART = "b"
 class Monkey:
     """Still a monkey."""
 
-    def __init__(self, items, op1, op2, condition, tdest, fdest):
+    def __init__(self, items, ops, condition, dests):
         """Initialize."""
         self.items = items
-        self.op1 = op1
-        self.op2 = op2
+        (self.op1, self.op2) = ops
         self.condition = condition
-        self.tdest = tdest
-        self.fdest = fdest
+        (self.tdest, self.fdest) = dests
         self.count = 0
 
 
@@ -32,11 +30,10 @@ def main():
         lines = m.splitlines()
         lines.pop(0)
         items = [int(x) for x in "".join(lines.pop(0).split()[2:]).split(",")]
-        op1, op2 = lines.pop(0).split()[-2:]
+        ops = lines.pop(0).split()[-2:]
         condition = int(lines.pop(0).split()[-1])
-        tdest = int(lines.pop(0).split()[-1])
-        fdest = int(lines.pop(0).split()[-1])
-        monkeys.append(Monkey(items, op1, op2, condition, tdest, fdest))
+        dests = (int(lines.pop(0).split()[-1]) for _ in range(2))
+        monkeys.append(Monkey(items, ops, condition, dests))
 
     mod = 1
     for m in monkeys:

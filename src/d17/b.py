@@ -29,21 +29,37 @@ def main():
     data = get_data(day=DAY, year=YEAR)
     print(f"{data=}")
 
-    data_len = len(data)
-
     rocks = set()
 
     def bounds_check(r, c):
-        return r >= 0 and c >= 0 and c < 7 and (r, c) not in rocks
+        return 0 <= r and 0 <= c < 7 and (r, c) not in rocks
 
     t = 0
 
-    max_heights = [-1]
-
     end_state_map = {}
 
-    cycle_start, cycle_end, cycle_length, cycle_height = -1, -1, -1, -1
+    cycle_start, cycle_end, cycle_length, cycle_height, max_heights = get_max_heights(
+        data, rocks, bounds_check, t, end_state_map
+    )
 
+    result = max_heights[-1]
+
+    num_cycles = (num_steps - cycle_end) // cycle_length
+    result += cycle_height * num_cycles
+    leftover_cycles = (num_steps - cycle_end) % cycle_length
+    result += (
+        max_heights[cycle_start + leftover_cycles + 1] - max_heights[cycle_start + 1]
+    )
+
+    print(f"{result=}")
+    submit(result, part=PART, day=DAY, year=YEAR)
+
+
+def get_max_heights(data, rocks, bounds_check, t, end_state_map):
+    """Get max heights."""
+    data_len = len(data)
+    cycle_start, cycle_end, cycle_length, cycle_height = -1, -1, -1, -1
+    max_heights = [-1]
     for i in range(num_steps):
         current_piece = [
             [r + max_heights[-1] + 4, c + 2] for r, c in pieces[i % num_pieces]
@@ -76,18 +92,7 @@ def main():
                 break
         if cycle_found:
             break
-
-    result = max_heights[-1]
-
-    num_cycles = (num_steps - cycle_end) // cycle_length
-    result += cycle_height * num_cycles
-    leftover_cycles = (num_steps - cycle_end) % cycle_length
-    result += (
-        max_heights[cycle_start + leftover_cycles + 1] - max_heights[cycle_start + 1]
-    )
-
-    print(f"{result=}")
-    submit(result, part=PART, day=DAY, year=YEAR)
+    return cycle_start, cycle_end, cycle_length, cycle_height, max_heights
 
 
 if __name__ == "__main__":

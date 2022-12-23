@@ -1,7 +1,8 @@
 #!/usr/bin/python3.10
 """2022 day 7."""
-from aocd import get_data, submit
 import sys
+
+from aocd import get_data, submit
 
 YEAR = 2022
 DAY = 7
@@ -19,7 +20,7 @@ class Dir:
 
     def total_size(self) -> int:
         """Get total size of this and subdirs."""
-        return self.size + sum([sd.total_size() for sd in self.subdirs])
+        return self.size + sum(sd.total_size() for sd in self.subdirs)
 
 
 def main():
@@ -56,7 +57,7 @@ def main():
 
     for d in dirs.values():
         current = d.total_size()
-        if current > target and current < result:
+        if target < current < result:
             result = current
 
     print(f"{result=}")

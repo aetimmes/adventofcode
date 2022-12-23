@@ -10,14 +10,12 @@ PART = "a"
 class Monkey:
     """A monkey."""
 
-    def __init__(self, items, op1, op2, condition, tdest, fdest):
+    def __init__(self, items, ops, condition, dests):
         """Initialize."""
         self.items = items
-        self.op1 = op1
-        self.op2 = op2
+        (self.op1, self.op2) = ops
         self.condition = condition
-        self.tdest = tdest
-        self.fdest = fdest
+        (self.tdest, self.fdest) = dests
         self.count = 0
 
 
@@ -32,25 +30,18 @@ def main():
         lines = m.splitlines()
         lines.pop(0)
         items = [int(x) for x in "".join(lines.pop(0).split()[2:]).split(",")]
-        op1, op2 = lines.pop(0).split()[-2:]
+        ops = (op for op in lines.pop(0).split()[-2:])
         condition = int(lines.pop(0).split()[-1])
-        tdest = int(lines.pop(0).split()[-1])
-        fdest = int(lines.pop(0).split()[-1])
-        monkeys.append(Monkey(items, op1, op2, condition, tdest, fdest))
+        dests = (int(lines.pop(0).split()[-1]) for _ in range(2))
+        monkeys.append(Monkey(items, ops, condition, dests))
 
     for _ in range(20):
         for m in monkeys:
             while m.items:
                 m.count += 1
                 old = m.items.pop()
-                if m.op2 == "old":
-                    op2 = old
-                else:
-                    op2 = int(m.op2)
-                if m.op1 == "*":
-                    new = old * op2
-                else:
-                    new = old + op2
+                op2 = old if m.op2 == "old" else int(m.op2)
+                new = old * op2 if m.op1 == "*" else old + op2
                 new = new // 3
                 if new % m.condition == 0:
                     monkeys[m.tdest].items.append(new)

@@ -41,24 +41,23 @@ class Packet:
     @staticmethod
     def cmp(left, right) -> int:
         """Compare two Packets, potentially recursively."""
+        rc = 0
         if isinstance(left, int):
             if isinstance(right, int):
-                return right - left
+                rc = right - left
             else:
-                return Packet.cmp([left], right)
+                rc = Packet.cmp([left], right)
         else:
             if isinstance(right, int):
-                return Packet.cmp(left, [right])
+                rc = Packet.cmp(left, [right])
             else:
                 for (l, r) in zip_longest(left, right, fillvalue=None):
-                    if l is None and r is not None:
-                        return 1
-                    if l is not None and r is None:
-                        return -1
-                    rc = Packet.cmp(l, r)
+                    rc = (l is None) - (r is None)
+                    if rc == 0:
+                        rc = Packet.cmp(l, r)
                     if rc != 0:
-                        return rc
-                return 0
+                        break
+        return rc
 
 
 def main():

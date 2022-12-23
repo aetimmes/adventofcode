@@ -27,31 +27,10 @@ def main():
         flow_rates[name] = int(tokens[4].split("=")[1][0:-1])
         dests[name] = [t[0:2] for t in tokens[9:]]
 
-    distances = defaultdict(dict)
-
     working_valves: set[str] = {k for k, v in flow_rates.items() if v > 0}
     working_valves.add("AA")
 
-    for v in working_valves:
-        cands = {x for x in working_valves if x is not v and not distances[v].get(x)}
-        t = 0
-        queue = [v]
-        nq = []
-        seen = set()
-        while cands:
-            while queue:
-                curr = queue.pop(0)
-                seen.add(curr)
-                if curr in cands:
-                    cands.remove(curr)
-                    distances[v][curr] = t
-                    distances[curr][v] = t
-                for dest in dests[curr]:
-                    if dest not in seen:
-                        nq.append(dest)
-            queue = nq
-            nq = []
-            t += 1
+    distances = get_distances(dests, working_valves)
 
     pprint(distances)
     if flow_rates["AA"] == 0:
@@ -87,6 +66,32 @@ def main():
 
     print(f"{result=}")
     submit(result, part=PART, day=DAY, year=YEAR)
+
+
+def get_distances(dests, working_valves):
+    """For all working valves, get the distances between them."""
+    distances = defaultdict(dict)
+    for v in working_valves:
+        cands = {x for x in working_valves if x is not v and not distances[v].get(x)}
+        t = 0
+        queue = [v]
+        nq = []
+        seen = set()
+        while cands:
+            while queue:
+                curr = queue.pop(0)
+                seen.add(curr)
+                if curr in cands:
+                    cands.remove(curr)
+                    distances[v][curr] = t
+                    distances[curr][v] = t
+                for dest in dests[curr]:
+                    if dest not in seen:
+                        nq.append(dest)
+            queue = nq
+            nq = []
+            t += 1
+    return distances
 
 
 if __name__ == "__main__":

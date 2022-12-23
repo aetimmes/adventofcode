@@ -40,14 +40,30 @@ def main():
 
     result = 0
 
+    def process_steps(position, facing, current):
+        """Take a walk on a cubular monkey forcefield."""
+        steps = int(current)
+        for _ in range(steps):
+            temp_pos = (
+                (position[0] + deltas[facing][0]),
+                (position[1] + deltas[facing][1]),
+            )
+            temp_facing = facing
+            if temp_pos not in open_tiles and temp_pos not in walls:
+                temp_pos, temp_facing = process_warp(
+                    position, facing, r_section_length, c_section_length
+                )
+            if temp_pos in open_tiles:
+                position = temp_pos
+                facing = temp_facing
+            if temp_pos in walls:
+                break
+        return position, facing
+
     current = ""
     for c in instructions:
         if c in ["L", "R"]:
             position, facing = process_steps(
-                open_tiles,
-                walls,
-                r_section_length,
-                c_section_length,
                 position,
                 facing,
                 current,
@@ -59,10 +75,6 @@ def main():
 
     if current:
         position, facing = process_steps(
-            open_tiles,
-            walls,
-            r_section_length,
-            c_section_length,
             position,
             facing,
             current,
@@ -95,29 +107,6 @@ def parse_input():
             elif char == "#":
                 walls.add((r, c))
     return instructions, open_tiles, walls, r_section_length, c_section_length
-
-
-def process_steps(
-    open_tiles, walls, r_section_length, c_section_length, position, facing, current
-):
-    """Take a walk on a cubular monkey forcefield."""
-    steps = int(current)
-    for _ in range(steps):
-        temp_pos = (
-            (position[0] + deltas[facing][0]),
-            (position[1] + deltas[facing][1]),
-        )
-        temp_facing = facing
-        if temp_pos not in open_tiles and temp_pos not in walls:
-            temp_pos, temp_facing = process_warp(
-                position, facing, r_section_length, c_section_length
-            )
-        if temp_pos in open_tiles:
-            position = temp_pos
-            facing = temp_facing
-        if temp_pos in walls:
-            break
-    return position, facing
 
 
 def process_warp(position, facing, r_section_length, c_section_length):

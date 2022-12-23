@@ -33,10 +33,10 @@ def main():
     def sim_blueprint(bp):
         max_geodes = 0
         costs = {
-            ORE:  {ORE: bp[0]},
-            CLAY : {ORE: bp[1]},
-            OBSIDIAN : {ORE: bp[2], CLAY: bp[3]},
-            GEODE : {ORE: bp[4], OBSIDIAN: bp[4]},
+            ORE: {ORE: bp[0]},
+            CLAY: {ORE: bp[1]},
+            OBSIDIAN: {ORE: bp[2], CLAY: bp[3]},
+            GEODE: {ORE: bp[4], OBSIDIAN: bp[4]},
         }
         time: int = 0
         c_robots: tuple[int, int, int, int] = (1, 0, 0, 0)
@@ -47,9 +47,9 @@ def main():
         ] = deque([(time, c_resources, c_robots)])
 
         fastest_states = defaultdict(int)
-        i=0
+        i = 0
         while q:
-            i+=1
+            i += 1
             (c_time, c_resources, c_robots) = q.pop()
             compare_max = True
             # loop through all the robots we could make
@@ -62,7 +62,7 @@ def main():
                             (costs[robot_type][cost_type] - c_resources[cost_type])
                             // c_robots[cost_type],
                         )
-                    else: 
+                    else:
                         max_t = sys.maxsize
                 if c_time + max_t + 1 <= TIME_LIMIT:
                     compare_max = False
@@ -70,7 +70,7 @@ def main():
                     resources = tuple(
                         c_resources[i]
                         + (c_robots[i] * (max_t + 1))
-                        - costs[robot_type].get(i,0)
+                        - costs[robot_type].get(i, 0)
                         for i in range(4)
                     )
                     robots = tuple(
