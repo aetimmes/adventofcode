@@ -5,23 +5,16 @@ from aocd.transforms import lines
 
 YEAR = 2022
 DAY = 24
-PART = "a"
+PART = "b"
 
 # grid in r,c, top-left 0,0
 DIRS = {">": 0, "v": 1, "<": 2, "^": 3}
 DELTAS = [(0, 1), (1, 0), (0, -1), (-1, 0), (0, 0)]
 
-DATA = """#.######
-#>>.<^<#
-#.<..<<#
-#>v.><>#
-#<^v^^>#
-######.#"""
 
-
-def bounds_check(r, c, mr, mc):
+def bounds_check(p, mr, mc, ss, gs):
     """Don't wander out of the valley."""
-    return (r, c) == (-1, 0) or (0 <= r < mr and 0 <= c < mc)
+    return p == ss or p == gs or (0 <= p[0] < mr and 0 <= p[1] < mc)
 
 
 def main():
@@ -32,16 +25,17 @@ def main():
     data.pop(0)
     data.pop()
 
-    time = 0
-    position = (-1, 0)
+    result = 0
+
     blizzards = [set()]
     for r, line in enumerate(data):
         for c, char in enumerate(line[1:-1]):
             if char in DIRS:
-                blizzards[time].add((r, c, DIRS[char]))
+                blizzards[result].add((r, c, DIRS[char]))
 
     max_rows = len(data)
     max_columns = len(data[0]) - 2
+    start_state = (-1, 0)
     goal_state = (max_rows, max_columns - 1)
 
     def gen_blizz(blizzards):
@@ -53,25 +47,33 @@ def main():
             next_blizzards.add((next_r, next_c, d))
         blizzards.append(next_blizzards)
 
-    q = {position}
     result = 0
-    while q:
-        result += 1
-        next_states = set()
-        gen_blizz(blizzards)
-        for (r, c) in q:
-            for (dr, dc) in DELTAS:
-                next_step = (r + dr, c + dc)
-                if next_step == goal_state:
-                    print(f"{result=}")
-                    submit(result, part=PART, day=DAY, year=YEAR)
-                    return
-                if bounds_check(*next_step, max_rows, max_columns) and all(
-                    (next_step[0], next_step[1], d) not in blizzards[result]
-                    for d in range(4)
-                ):
-                    next_states.add(next_step)
-        q = next_states
+    for _ in range(3):
+        position = start_state
+        q = {position}
+        found = False
+        while not found:
+            result += 1
+            next_states = set()
+            gen_blizz(blizzards)
+            for (r, c) in q:
+                for (dr, dc) in DELTAS:
+                    next_step = (r + dr, c + dc)
+                    if next_step == goal_state:
+                        print(f"{result=}")
+                        found = True
+                    elif bounds_check(
+                        next_step, max_rows, max_columns, start_state, goal_state
+                    ) and all(
+                        (next_step[0], next_step[1], d) not in blizzards[result]
+                        for d in range(4)
+                    ):
+                        next_states.add(next_step)
+            q = next_states
+        start_state, goal_state = goal_state, start_state
+
+    print(f"{result=}")
+    submit(result, part=PART, day=DAY, year=YEAR)
 
 
 def print_grid(blizzards, mr, mc):
