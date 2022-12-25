@@ -4,7 +4,7 @@ import unittest
 
 import pytest
 
-from src.d22.b import process_warp  # pylint: disable=import-error
+from src.y2022.d22.b import process_warp  # pylint: disable=import-error
 
 R_SECTION_LENGTH = 50
 C_SECTION_LENGTH = 50

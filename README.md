@@ -1,2 +1,5 @@
-# AoC-2022
-Advent of Code 2022
+# adventofcode
+
+Advent of Code solutions.
+
+Mostly in python; not guaranteed to work in all scenarios.
