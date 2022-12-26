@@ -4,7 +4,7 @@ from aocd import get_data, submit
 
 YEAR = 2015
 DAY = 11
-PART = "a"
+PART = "b"
 
 
 def increment(chars):
@@ -64,6 +64,9 @@ def main():
     while not test_pw(chars):
         chars = increment(chars)
 
+    chars = increment(chars)
+    while not test_pw(chars):
+        chars = increment(chars)
     result = nums_to_string(chars)
 
     print(f"{result=}")

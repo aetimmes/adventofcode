@@ -4,7 +4,7 @@ from aocd import get_data, submit
 
 YEAR = 2015
 DAY = 10
-PART = "a"
+PART = "b"
 
 
 def main():
@@ -12,7 +12,7 @@ def main():
     data = get_data(day=DAY, year=YEAR)
     print(f"{data=}")
     prev = data
-    for _ in range(40):
+    for _ in range(50):
         current = ""
         next_ = ""
         count = 0
@@ -28,7 +28,7 @@ def main():
         if count:
             next_ += str(count) + current
         prev = next_
-                
+
     result = len(prev)
 
     submit(result, part=PART, day=DAY, year=YEAR)

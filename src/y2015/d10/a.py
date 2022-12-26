@@ -4,15 +4,15 @@ from aocd import get_data, submit
 
 YEAR = 2015
 DAY = 10
-PART = "b"
+PART = "a"
 
 
 def main():
-    """Part b."""
+    """Part a."""
     data = get_data(day=DAY, year=YEAR)
     print(f"{data=}")
     prev = data
-    for _ in range(50):
+    for _ in range(40):
         current = ""
         next_ = ""
         count = 0
