@@ -8,24 +8,11 @@ from aocd.transforms import lines
 
 YEAR = 2015
 DAY = 13
-PART = "a"
-
-DATA = """Alice would gain 54 happiness units by sitting next to Bob.
-Alice would lose 79 happiness units by sitting next to Carol.
-Alice would lose 2 happiness units by sitting next to David.
-Bob would gain 83 happiness units by sitting next to Alice.
-Bob would lose 7 happiness units by sitting next to Carol.
-Bob would lose 63 happiness units by sitting next to David.
-Carol would lose 62 happiness units by sitting next to Alice.
-Carol would gain 60 happiness units by sitting next to Bob.
-Carol would gain 55 happiness units by sitting next to David.
-David would gain 46 happiness units by sitting next to Alice.
-David would lose 7 happiness units by sitting next to Bob.
-David would gain 41 happiness units by sitting next to Carol."""
+PART = "b"
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
@@ -38,6 +25,10 @@ def main():
         t = line.split()
         val = int(t[3]) * (1 if t[2] == "gain" else -1)
         m[t[0]][t[-1]] = val
+
+    for k in list(m.keys()):
+        m[k]["Me"] = 0
+        m["Me"][k] = 0
 
     for i in itertools.permutations(m.keys()):
         current = 0

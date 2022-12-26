@@ -5,7 +5,7 @@ from aocd import get_data, submit
 
 YEAR = 2015
 DAY = 12
-PART = "a"
+PART = "b"
 
 
 def recursive_sum(x):
@@ -17,12 +17,14 @@ def recursive_sum(x):
         case list():
             return sum(recursive_sum(e) for e in x)
         case dict():
-            return sum(recursive_sum(v) for _, v in x.items())
+            if "red" in x.values():
+                return 0
+            return sum(recursive_sum(v) for k, v in x.items())
     return 0
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = get_data(day=DAY, year=YEAR)
     print(f"{data=}")
 
