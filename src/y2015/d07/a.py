@@ -53,7 +53,7 @@ def main():
                 next_.append(line)
                 continue
             if ls[1] == "AND":
-                if ls[0].isnumeric():
+                if ls[0] == "1":
                     circuits[rs] = circuits[ls[2]]
                 else:
                     circuits[rs] = (circuits[ls[0]] & circuits[ls[2]]) % LIMIT
