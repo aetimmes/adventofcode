@@ -5,7 +5,7 @@ from aocd.transforms import lines
 
 YEAR = 2015
 DAY = 7
-PART = "a"
+PART = "b"
 
 LIMIT = 2**16
 
@@ -15,8 +15,17 @@ def main():
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
-    circuits = {}
+    circuits = calculate(data, {})
+    temp = circuits["a"]
+    circuits = calculate(data, {"b": temp})
 
+    result = circuits["a"]
+    print(f"{result=}")
+    submit(result, part=PART, day=DAY, year=YEAR)
+
+
+def calculate(data, circuits):
+    """Attempt operations in sequence until we perform all of them."""
     q = data
     while q:
         next_ = []
@@ -24,6 +33,8 @@ def main():
             ls, rs = line.split(" -> ")
             ls = ls.split()
             if len(ls) == 1:  # assignment
+                if rs in circuits:
+                    continue  # part b carryover
                 if ls[0].isnumeric():
                     print(line)
                     circuits[rs] = int(ls[0]) % LIMIT
@@ -71,10 +82,7 @@ def main():
                 circuits[rs] = (circuits[ls[0]] >> int(ls[2])) % LIMIT
                 print(f"{circuits[ls[0]]=}, {ls[2]=}, {circuits[rs]=}")
         q = next_
-
-    result = circuits["a"]
-    print(f"{result=}")
-    submit(result, part=PART, day=DAY, year=YEAR)
+    return circuits
 
 
 if __name__ == "__main__":
