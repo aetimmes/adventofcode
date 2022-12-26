@@ -1,19 +1,22 @@
 #!/usr/bin/python3.11
-"""2022 day FIXME."""
-from aocd import get_data, submit
-from aocd.transforms import lines
+"""2015 day 4."""
+import hashlib
 
-YEAR = 2022
-DAY = -1  # FIX ME
+from aocd import get_data, submit
+
+YEAR = 2015
+DAY = 4  # FIX ME
 PART = "a"
 
 
 def main():
     """Part a."""
-    data = lines(get_data(day=DAY, year=YEAR))
+    data = get_data(day=DAY, year=YEAR)
     print(f"{data=}")
 
-    result = 0
+    result = 1
+    while hashlib.md5((data + str(result)).encode("utf-8")).hexdigest()[0:5] != "00000":
+        result += 1
 
     print(f"{result=}")
     submit(result, part=PART, day=DAY, year=YEAR)

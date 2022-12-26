@@ -1,23 +1,24 @@
 #!/usr/bin/python3.11
-"""2015 day 1."""
+"""2015 day 4."""
+import hashlib
+
 from aocd import get_data, submit
 
 YEAR = 2015
-DAY = 1  # FIX ME
-PART = "a"
+DAY = 4  # FIX ME
+PART = "b"
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = get_data(day=DAY, year=YEAR)
     print(f"{data=}")
 
-    result = 0
-    for c in data:
-        if c == "(":
-            result += 1
-        elif c == ")":
-            result -= 1
+    result = 1
+    while (
+        hashlib.md5((data + str(result)).encode("utf-8")).hexdigest()[0:6] != "000000"
+    ):
+        result += 1
 
     print(f"{result=}")
     submit(result, part=PART, day=DAY, year=YEAR)

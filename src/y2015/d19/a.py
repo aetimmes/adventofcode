@@ -1,9 +1,9 @@
 #!/usr/bin/python3.11
-"""2022 day FIXME."""
+"""2015 day 1."""
 from aocd import get_data, submit
 from aocd.transforms import lines
 
-YEAR = 2022
+YEAR = 2015
 DAY = -1  # FIX ME
 PART = "a"
 

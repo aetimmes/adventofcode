@@ -5,7 +5,7 @@ from numpy import array
 
 YEAR = 2015
 DAY = 3
-PART = "a"
+PART = "b"
 
 deltas = {
     "^": array((-1, 0)),
@@ -20,12 +20,12 @@ def main():
     data = get_data(day=DAY, year=YEAR)
     print(f"{data=}")
 
-    position = array((0, 0))
-    seen = {tuple(position)}
+    position = [array((0, 0)), array((0, 0))]
+    seen = {tuple(position[0])}
 
-    for c in data:
-        position += deltas[c]
-        seen.add(tuple(position))
+    for i, c in enumerate(data):
+        position[i % 2] += deltas[c]
+        seen.add(tuple(position[i % 2]))
 
     result = len(seen)
 
