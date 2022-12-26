@@ -7,13 +7,13 @@ from numpy import array
 
 YEAR = 2015
 DAY = 15
-PART = "a"
+PART = "b"
 
 LIMIT = 100
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
@@ -40,6 +40,8 @@ def main():
                 scores = array([0, 0, 0, 0, 0])
                 for x, ingredient in enumerate(ingredients):
                     scores += ingredient * counts[x]
+                if scores[-1] != 500:
+                    continue
                 score = math.prod(max(0, s) for s in scores[:-1])
                 if score > result:
                     amounts = counts
