@@ -5,7 +5,7 @@ from aocd.transforms import lines
 
 YEAR = 2015
 DAY = 16
-PART = "a"
+PART = "b"
 
 INPUT = """children: 3
 cats: 7
@@ -18,9 +18,12 @@ trees: 3
 cars: 2
 perfumes: 1"""
 
+GT = ["cats", "trees"]
+LT = ["pomeranians", "goldfish"]
+
 
 def main():
-    """Part a."""
+    """Part b."""
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
@@ -35,7 +38,13 @@ def main():
         success = True
         for p in pairs:
             ls, rs = p.split(": ")
-            if sue.get(ls) != int(rs):
+            if ls in GT:
+                if int(rs) <= sue[ls]:
+                    success = False
+            elif ls in LT:
+                if int(rs) >= sue[ls]:
+                    success = False
+            elif sue.get(ls) != int(rs):
                 success = False
         if success:
             result = i + 1
