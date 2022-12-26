@@ -2,21 +2,20 @@
 """2015 day 9."""
 from collections import defaultdict
 import itertools
-import sys
 from aocd import get_data, submit
 from aocd.transforms import lines
 
 YEAR = 2015
 DAY = 9  # FIX ME
-PART = "a"
+PART = "b"
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
-    result = sys.maxsize
+    result = 0
 
     m = defaultdict(dict)
 
@@ -29,7 +28,7 @@ def main():
         current = 0
         for j in range(len(i)-1):
             current += m[i[j]][i[j+1]]
-        result = current if current < result else result
+        result = current if current > result else result
 
     print(f"{result=}")
     submit(result, part=PART, day=DAY, year=YEAR)
