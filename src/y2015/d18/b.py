@@ -5,7 +5,7 @@ from aocd.transforms import lines
 
 YEAR = 2015
 DAY = 18
-PART = "a"
+PART = "b"
 
 STEPS = 100
 DELTAS = ((-1, 0), (0, 1), (1, 0), (0, -1), (-1, 1), (1, 1), (1, -1), (-1, -1))
@@ -16,7 +16,7 @@ def main():
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
-    lights = set()
+    lights = {(0, 0), (0, 99), (99, 0), (99, 99)}
 
     for r, line in enumerate(data):
         for c, char in enumerate(line):
@@ -24,7 +24,7 @@ def main():
                 lights.add((r, c))
 
     for _ in range(STEPS):
-        next_ = set()
+        next_ = {(0, 0), (0, 99), (99, 0), (99, 99)}
         for r in range(100):
             for c in range(100):
                 neighbors = sum((r + dr, c + dc) in lights for dr, dc in DELTAS)
