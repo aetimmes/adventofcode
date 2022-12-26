@@ -1,23 +1,18 @@
 #!/usr/bin/python3.11
 """2015 day 20."""
-import math
-
 from aocd import get_data, submit
 
 YEAR = 2015
 DAY = 20
-PART = "a"
+PART = "b"
 
 
 def calc_house(n):
     """Determine how many presents house n gets."""
     result = 0
-    for i in range(1, math.ceil(math.sqrt(n))):
+    for i in range(1, 51):
         if n % i == 0:
-            result += 10 * i
-            j = n // i
-            if j != i:
-                result += 10 * j
+            result += 11 * n // i
     return result
 
 
