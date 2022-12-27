@@ -1,13 +1,11 @@
 #!/usr/bin/python3.11
 """2015 day 21."""
-import sys
-
 from aocd import get_data, submit
 from aocd.transforms import lines
 
 YEAR = 2015
 DAY = 21
-PART = "a"
+PART = "b"
 
 INPUT = """Weapons:    Cost  Damage  Armor
 Dagger        8     4       0
@@ -46,7 +44,7 @@ def player_wins(hp, damage, armor, boss_hp, boss_damage, boss_armor):
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
@@ -61,7 +59,7 @@ def main():
     for line in r.splitlines()[1:]:
         rings.append(tuple(map(int, line.split()[-3:])))
 
-    result = sys.maxsize
+    result = 0
 
     for _, weapon in enumerate(weapons):
         for _, armor in enumerate(armors):
@@ -69,11 +67,11 @@ def main():
                 for _, ring_b in enumerate(rings[k + 1:]):
                     items = (weapon, armor, ring_a, ring_b)
                     cost = sum(item[0] for item in items)
-                    if cost > result:
+                    if cost < result:
                         continue
                     damage = sum(item[1] for item in items)
                     armour = sum(item[2] for item in items)
-                    if player_wins(
+                    if not player_wins(
                         100, damage, armour, boss_hp, boss_damage, boss_armor
                     ):
                         print(f"{items=}")
