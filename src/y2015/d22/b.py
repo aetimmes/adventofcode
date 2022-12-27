@@ -9,7 +9,7 @@ from numpy import array
 
 YEAR = 2015
 DAY = 22
-PART = "a"
+PART = "b"
 
 (
     BOSS_HP,
@@ -97,7 +97,7 @@ def process_attack(state):
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
@@ -128,11 +128,16 @@ def main():
         array([0, 0, 0, -229, 229, 0, 0, 0, 5]),  # recharge
     ]
 
+    hard_mode = array([0, 0, -1, 0, 0, 0, 0, 0, 0])
+
     result = sys.maxsize
     winning_history = None
     q = [copy.deepcopy(initial)]
     while q:
         (current, history) = q.pop()
+        current = current + hard_mode
+        if current[CURRENT_HP] <= 0:
+            continue
         current = process_effects(current)
         if current[BOSS_HP] <= 0:
             if current[MANA_SPENT] < result:
