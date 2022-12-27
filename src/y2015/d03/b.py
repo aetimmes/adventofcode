@@ -16,7 +16,7 @@ deltas = {
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = get_data(day=DAY, year=YEAR)
     print(f"{data=}")
 

@@ -17,7 +17,7 @@ def calc_house(n):
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = int(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 

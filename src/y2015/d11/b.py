@@ -52,7 +52,7 @@ def string_to_nums(string):
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = get_data(day=DAY, year=YEAR)
     # data = "abcdefgh"
     print(f"{data=}")
