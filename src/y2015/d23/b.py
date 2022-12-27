@@ -5,15 +5,15 @@ from aocd.transforms import lines
 
 YEAR = 2015
 DAY = 23
-PART = "a"
+PART = "b"
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
-    registers = {"a": 0, "b": 0}
+    registers = {"a": 1, "b": 0}
 
     ic = 0
     print(f"{len(data)=}")
