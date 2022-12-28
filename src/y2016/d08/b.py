@@ -1,11 +1,11 @@
 #!/usr/bin/python3.11
 """2016 day 8."""
-from aocd import get_data, submit
+from aocd import get_data
 from aocd.transforms import lines
 
 YEAR = 2016
 DAY = 8
-PART = "a"
+PART = "b"
 
 dimensions = (6, 50)
 
@@ -13,7 +13,7 @@ m = {"row": 0, "column": 1}
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
@@ -41,8 +41,17 @@ def main():
                 grid.add(e)
 
     result = len(grid)
+
+    for r in range(dimensions[0]):
+        line = ""
+        for c in range(dimensions[1]):
+            if (r, c) in grid:
+                line += "#"
+            else:
+                line += "."
+        print(line)
+
     print(f"{result=}")
-    submit(result, part=PART, day=DAY, year=YEAR)
 
 
 if __name__ == "__main__":

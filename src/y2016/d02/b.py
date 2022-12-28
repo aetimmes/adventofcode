@@ -6,7 +6,7 @@ from numpy import array
 
 YEAR = 2016
 DAY = 2
-PART = "a"
+PART = "b"
 
 deltas = {
     "U": array([-1, 0]),
@@ -15,16 +15,22 @@ deltas = {
     "L": array([0, -1]),
 }
 
-keypad = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+keypad = [
+    [0, 0, 1, 0, 0],
+    [0, 2, 3, 4, 0],
+    [5, 6, 7, 8, 9],
+    [0, "A", "B", "C", 0],
+    [0, 0, "D", 0, 0],
+]
 
 
 def bounds_check(r, c):
     """Check bounds."""
-    return 0 <= r < len(keypad) and 0 <= c < len(keypad[0])
+    return abs(r - 2) + abs(c - 2) < 3
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 

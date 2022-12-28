@@ -5,24 +5,30 @@ from aocd.transforms import lines
 
 YEAR = 2016
 DAY = 9
-PART = "a"
+PART = "b"
+
+
+def decompress(s, i):
+    ls, s = s[i:].split("(", 1)
+    result = len(ls)
+    if s:
+        mid, s = s.split(")", 1)
+        char_count, copy_count = tuple(map(int, mid.split("x")))
+        score, s = decompress(s, i + char_count)
+        result += copy_count * score
+    return result, s
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = "".join(lines(get_data(day=DAY, year=YEAR)))
     print(f"{data=}")
 
-    decompressed = ""
+    result = 0
 
     while "(" in data:
-        ls, data = data.split("(", 1)
-        decompressed += ls
-        mid, data = data.split(")", 1)
-        char_count, copy_count = tuple(map(int, mid.split("x")))
-
-        repeated, data = data[:char_count], data[char_count:]
-        decompressed += repeated * copy_count
+        score, data = decompress(data, 0)
+        result += score
 
     if data:
         decompressed += data

@@ -5,11 +5,11 @@ from aocd.transforms import lines
 
 YEAR = 2016
 DAY = 7
-PART = "a"
+PART = "b"
 
 
-def supports_tls(line):
-    """Check an IP to see if it supports TLS."""
+def supports_ssl(line):
+    """Check an IP to see if it supports SSL."""
     outies = []
     innies = []
     while "[" in line:
@@ -19,26 +19,31 @@ def supports_tls(line):
         innies.append(mid)
     if line:
         outies.append(line)
-    return (not any(has_abba(i) for i in innies)) and any(has_abba(o) for o in outies)
+    abas = []
+    for o in outies:
+        abas.extend(get_abas(o))
+    babs = [aba[1] + aba[0] + aba[1] for aba in abas]
+    return any((bab in innie for bab in babs for innie in innies))
 
 
-def has_abba(s):
-    """Check a string to see if it contains an ABBA."""
-    for i in range(len(s) - 3):
-        if s[i] == s[i + 3] and s[i + 1] == s[i + 2] and s[i] != s[i + 1]:
-            return True
-    return False
+def get_abas(s):
+    """Return all ABAs in a string."""
+    result = []
+    for i in range(len(s) - 2):
+        if s[i] == s[i + 2] and s[i] != s[i + 1]:
+            result.append(s[i:i + 3])
+    return result
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
     result = 0
 
     for line in data:
-        if supports_tls(line):
+        if supports_ssl(line):
             result += 1
 
     print(f"{result=}")
