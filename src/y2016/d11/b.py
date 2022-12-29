@@ -26,15 +26,17 @@ def is_legal(floors):
                 return False
     return True
 
+
 def tuplize(floors):
     rep = [[-1, -1] for _ in range(7)]
     for i, floor in enumerate(floors):
         for e in floor:
             if e < 10:
-                rep[e-1][0] = i
+                rep[e - 1][0] = i
             else:
-                rep[(e//10)-1][1] = i
+                rep[(e // 10) - 1][1] = i
     return tuple(sorted(tuple(r) for r in rep))
+
 
 def main():
     """Part b."""
@@ -48,7 +50,7 @@ def main():
     goal = (3, (set(), set(), set(), {1, 2, 3, 4, 5, 6, 7, 10, 20, 30, 40, 50, 60, 70}))
     q = [initial]
     done = False
-    result = -1 
+    result = -1
     seen = set()
     while not done and q:
         result += 1
@@ -72,20 +74,17 @@ def main():
                                 new_floors.append(floors[f])
                         new_floors = tuple(new_floors)
                         next_state = (next_ele_pos, new_floors)
-                        if (
-                            next_ele_pos,
-                            tuplize(new_floors)
-                        ) in seen:
+                        if (next_ele_pos, tuplize(new_floors)) in seen:
                             continue
                         if next_state == goal:
                             done = True
                         if is_legal(new_floors):
                             next_q.append(next_state)
-        #q = next_q
-        q = sorted(
-            next_q,
-            key=lambda x: (len(x[1][0]), len(x[1][1]), len(x[1][2]), len(x[1][3])),
-        )[:100000]  # setting this to 1k/10k wasn't permissive enough
+        q = next_q
+        # q = sorted(
+        #    next_q,
+        #    key=lambda x: (len(x[1][0]), len(x[1][1]), len(x[1][2]), len(x[1][3])),
+        # )  # setting this to 1k/10k wasn't permissive enough
         print(f"{len(q)=}")
 
     print(f"{result=}")
