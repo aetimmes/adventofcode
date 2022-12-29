@@ -6,7 +6,7 @@ import hashlib
 
 YEAR = 2016
 DAY = 17
-PART = "a"
+PART = "b"
 VALID = {"b", "c", "d", "e", "f"}
 # r, c
 DIRS = "UDLR"
@@ -19,11 +19,11 @@ def bounds_check(r, c, mr, mc):
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = get_data(day=DAY, year=YEAR)
     print(f"{data=}")
 
-    result = " " * 20000
+    result = ""
 
     state = ((0, 0), "")  # position, path so far
     goal = (3, 3)
@@ -31,22 +31,21 @@ def main():
 
     while q:
         (pos, path) = q.pop()
-        if len(path) >= len(result):
-            continue
         h = hashlib.md5((data + path).encode("utf-8")).hexdigest()
         for i, d in enumerate(DIRS):
             new_pos = tuple(pos[j] + DELTAS[i][j] for j in [0, 1])
+            new_path = path + d
             if h[i] in VALID and bounds_check(
                 new_pos[0], new_pos[1], GRID_SIZE, GRID_SIZE
             ):
                 if new_pos == goal:
-                    if len(result) > len(path):
-                        result = path + d
+                    if len(result) < len(new_path):
+                        result = new_path
                     continue
-                q.append((new_pos, path + d))
+                q.append((new_pos, new_path))
 
     print(f"{result=}")
-    submit(result, part=PART, day=DAY, year=YEAR)
+    submit(len(result), part=PART, day=DAY, year=YEAR)
 
 
 if __name__ == "__main__":

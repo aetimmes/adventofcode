@@ -4,9 +4,9 @@ from aocd import get_data, submit
 
 YEAR = 2016
 DAY = 18
-PART = "a"
+PART = "b"
 
-ROWS = 40
+ROWS = 400000
 
 U = -1
 L = -1
@@ -14,7 +14,7 @@ R = 1
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = get_data(day=DAY, year=YEAR)
     print(f"{data=}")
 
