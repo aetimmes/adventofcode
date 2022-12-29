@@ -5,17 +5,18 @@ from aocd.transforms import lines
 
 YEAR = 2016
 DAY = 12
-PART = "a"
+PART = "b"
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
     result = 0
 
     registers = {i: 0 for i in "abcd"}
+    registers["c"] = 1
     ic = 0
     while ic < len(data):
         current = data[ic]
