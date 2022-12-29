@@ -9,13 +9,13 @@ from aocd.transforms import lines
 
 YEAR = 2016
 DAY = 24
-PART = "a"
+PART = "b"
 
 DELTAS = ((1, 0), (0, 1), (-1, 0), (0, -1))
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
@@ -65,6 +65,7 @@ def main():
         current = distances[start][perm[0]]
         for i in range(len(perm) - 1):
             current += distances[perm[i]][perm[i + 1]]
+        current += distances[perm[-1]][start]
         if current < result:
             result = current
 
