@@ -80,11 +80,11 @@ def main():
                             done = True
                         if is_legal(new_floors):
                             next_q.append(next_state)
-        q = next_q
-        # q = sorted(
-        #    next_q,
-        #    key=lambda x: (len(x[1][0]), len(x[1][1]), len(x[1][2]), len(x[1][3])),
-        # )  # setting this to 1k/10k wasn't permissive enough
+        #q = next_q
+        q = sorted(
+           next_q,
+           key=lambda x: (len(x[1][0]), len(x[1][1]), len(x[1][2]), len(x[1][3])),
+        )[:1000000]  # setting this to 1k/10k wasn't permissive enough
         print(f"{len(q)=}")
 
     print(f"{result=}")

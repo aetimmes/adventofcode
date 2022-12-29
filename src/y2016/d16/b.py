@@ -4,11 +4,11 @@ from aocd import get_data, submit
 
 YEAR = 2016
 DAY = 16
-PART = "a"
+PART = "b"
 
 bit_flip = {"0": "1", "1": "0"}
 
-LENGTH = 272
+LENGTH = 35651584
 
 
 def dragon_curve(a: str, length: int):
@@ -34,7 +34,7 @@ def checksum(a):
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = get_data(day=DAY, year=YEAR)
     print(f"{data=}")
 
