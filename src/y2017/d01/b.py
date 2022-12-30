@@ -4,18 +4,21 @@ from aocd import get_data, submit
 
 YEAR = 2017
 DAY = 1
-PART = "a"
+PART = "b"
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = get_data(day=DAY, year=YEAR)
     print(f"{data=}")
 
     result = 0
     length = len(data)
     for i in range(length):
-        if data[i] == data[(i + 1) % length]:
+        # Operator precedence bug:
+        # if data[i] == data[((i + length) // 2) % length]:
+        # We shouldn't be dividing i by 2 to find the element length//2 away.
+        if data[i] == data[(i + (length // 2)) % length]:
             result += int(data[i])
 
     print(f"{result=}")
