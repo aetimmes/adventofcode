@@ -1,20 +1,13 @@
 #!/usr/bin/python3.11
 """2016 day 11."""
 import itertools
+
 from aocd import get_data, submit
 from aocd.transforms import lines
 
 YEAR = 2016
 DAY = 11
 PART = "a"
-
-elements = [
-    "promethium",
-    "cobalt",
-    "curium",
-    "ruthenium",
-    "plutonium",
-]
 
 microchip = 0
 generator = 1
@@ -75,7 +68,9 @@ def main():
         q = sorted(
             next_q,
             key=lambda x: (len(x[1][0]), len(x[1][1]), len(x[1][2]), len(x[1][3])),
-        )[:50000] # setting this to 1k/10k wasn't permissive enough
+        )[
+            :50000
+        ]  # setting this to 1k/10k wasn't permissive enough
 
     print(f"{result=}")
     submit(result, part=PART, day=DAY, year=YEAR)

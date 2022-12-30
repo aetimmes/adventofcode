@@ -8,32 +8,32 @@ DAY = 9
 PART = "b"
 
 
-def decompress(s, i):
-    ls, s = s[i:].split("(", 1)
-    result = len(ls)
-    if s:
-        mid, s = s.split(")", 1)
-        char_count, copy_count = tuple(map(int, mid.split("x")))
-        score, s = decompress(s, i + char_count)
-        result += copy_count * score
-    return result, s
-
-
 def main():
-    """Part b."""
+    """
+    Part b.
+
+    Core algorithm shamelessly stolen from the spoiler thread for this day. I couldn't
+    figure out the right mental model to use for the expansions without storing the
+    string in memory and every attempt I made at figuring out the math was wrong for at
+    least one of the sample inputs.
+    """
     data = "".join(lines(get_data(day=DAY, year=YEAR)))
     print(f"{data=}")
 
+    mults = [1 for _ in data]
     result = 0
-
-    while "(" in data:
-        score, data = decompress(data, 0)
-        result += score
-
-    if data:
-        decompressed += data
-
-    result = len(decompressed)
+    i = 0
+    while i < len(data):
+        if data[i] == "(":
+            start = i
+            end = data.index(")", start) + 1
+            chars, copies = tuple(map(int, data[start + 1:end - 1].split("x")))
+            for j in range(end, end + chars):
+                mults[j] *= copies
+            i = end
+        else:
+            result += mults[i]
+            i += 1
 
     print(f"{result=}")
     submit(result, part=PART, day=DAY, year=YEAR)
