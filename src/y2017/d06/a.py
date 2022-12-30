@@ -1,20 +1,29 @@
 #!/usr/bin/python3.11
-"""2017 day FIXME."""
+"""2017 day 6."""
 from aocd import get_data, submit
-from aocd.transforms import lines
 
 YEAR = 2017
-DAY = -1  # FIX ME
+DAY = 6
 PART = "a"
 
 
 def main():
     """Part a."""
-    data = lines(get_data(day=DAY, year=YEAR))
+    data = [int(x) for x in get_data(day=DAY, year=YEAR).split()]
     print(f"{data=}")
 
-    result = 0
+    seen = set()
+    while tuple(data) not in seen:
+        seen.add(tuple(data))
+        i = data.index(max(data))
+        to_distribute = data[i]
+        data[i] = 0
+        for _ in range(to_distribute):
+            i += 1
+            i %= len(data)
+            data[i] += 1
 
+    result = len(seen)
     print(f"{result=}")
     submit(result, part=PART, day=DAY, year=YEAR)
 
