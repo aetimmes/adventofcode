@@ -2,20 +2,22 @@
 """2017 day 4."""
 from aocd import get_data, submit
 from aocd.transforms import lines
+from collections import Counter
 
 YEAR = 2017
 DAY = 4
-PART = "a"
+PART = "b"
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
     result = 0
     for line in data:
-        if len(line.split()) == len(set(line.split())):
+        counters = [tuple(sorted(Counter(word).items())) for word in line.split()]
+        if len(line.split()) == len(set(counters)):
             result += 1
 
     print(f"{result=}")
