@@ -1,12 +1,10 @@
 #!/usr/bin/python3.11
 """2017 day 11."""
-from collections import Counter
-
 from aocd import get_data, submit
 
 YEAR = 2017
 DAY = 11
-PART = "a"
+PART = "b"
 
 # Bug: I had nw and sw swapped in the order leading to misaggregated axial sums.
 hex_dirs = [
@@ -20,11 +18,23 @@ hex_dirs = [
 
 
 def main():
-    """Part a."""
-    data = Counter(get_data(day=DAY, year=YEAR).split(","))
+    """Part b."""
+    data = get_data(day=DAY, year=YEAR).split(",")
     print(f"{data=}")
 
-    axes = [data[dir] for dir in hex_dirs]
+    result = 0
+    axes = [0 for _ in hex_dirs]
+    for step in data:
+        axes[hex_dirs.index(step)] += 1
+        current = get_dist(axes)
+        result = max(current, result)
+
+    print(f"{result=}")
+    submit(result, part=PART, day=DAY, year=YEAR)
+
+
+def get_dist(axes):
+    """Determine distance from a list of hex axes."""
     length = len(axes)
     print(f"{axes=}")
     for i in range(length):
@@ -33,21 +43,21 @@ def main():
         axes[i - length // 2] -= temp
 
     print(f"{axes=}")
+    # Bug: I originally had this set to sys.maxsize, which breaks when we're standing
+    # at the origin and the array index is wildly out of bounds. Instead, we use 0,
+    # since if we don't find an edge, it means 4+ of the elements are 0, so the
+    # subtraction is a noop.
     right_edge = 0
     for i in range(length):
         if axes[i] and axes[i - 1] and axes[i - 2]:
             right_edge = i
-
     temp = min(axes[right_edge - i] for i in (0, 2))
     axes[right_edge] -= temp
     axes[right_edge - 1] += temp
     axes[right_edge - 2] -= temp
 
     result = sum(axes)
-    print(f"{axes=}")
-
-    print(f"{result=}")
-    submit(result, part=PART, day=DAY, year=YEAR)
+    return result
 
 
 if __name__ == "__main__":

@@ -5,11 +5,11 @@ from aocd.transforms import lines
 
 YEAR = 2017
 DAY = 12
-PART = "a"
+PART = "b"
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = lines(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
@@ -18,14 +18,16 @@ def main():
     for line in data:
         ls, rs = line.split(" <-> ")
         connections[ls] = rs.split(", ")
-    q = ["0"]
-    seen = {"0"}
-    while q:
-        current = q.pop()
-        seen.add(current)
-        q.extend([c for c in connections[current] if c not in seen])
+    programs = set(connections.keys())
+    result = 0
+    while programs:
+        result += 1
+        q = [programs.pop()]
+        while q:
+            current = q.pop()
+            programs.discard(current)
+            q.extend([c for c in connections[current] if c in programs])
 
-    result = len(seen)
     print(f"{result=}")
     submit(result, part=PART, day=DAY, year=YEAR)
 
