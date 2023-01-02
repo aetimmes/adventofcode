@@ -1,27 +1,60 @@
 #!/usr/bin/python3.11
 """2017 day 14."""
-from collections import Counter
 from aocd import get_data, submit
 
 YEAR = 2017
 DAY = 14
-PART = "a"
+PART = "b"
+
+DELTAS = ((0, 1), (1, 0), (0, -1), (-1, 0))
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = get_data(day=DAY, year=YEAR)
     print(f"{data=}")
-    grid = []
+    hashes = []
     for i in range(128):
-        grid.append(get_knot_hash(f"{data}-{i}"))
+        hashes.append(get_knot_hash(f"{data}-{i}"))
+
+    ones = set()
+    for r, line in enumerate(hashes):
+        for i, num in enumerate(line):
+            for j, e in enumerate(f"{num:08b}"):
+                if e == "1":
+                    ones.add((r, i * 8 + j))
+
+    print_grid(ones)
 
     result = 0
-    for line in grid:
-        for e in line:
-            result += Counter(f"{e:08b}")["1"]
+    while ones:
+        result += 1
+        q = [ones.pop()]
+        while q:
+            (r, c) = q.pop()
+            for dr, dc in DELTAS:
+                e = (r + dr, c + dc)
+                if e in ones:
+                    q.append(e)
+                    ones.remove(e)
+
     print(f"{result=}")
     submit(result, part=PART, day=DAY, year=YEAR)
+
+
+def print_grid(ones):
+    """Print a representation of a hash grid."""
+    grid = []
+    for r in range(128):
+        current = ""
+        for c in range(128):
+            if (r, c) in ones:
+                current += "#"
+            else:
+                current += "."
+        grid.append(current)
+    for line in grid:
+        print(line)
 
 
 def get_knot_hash(input_string):
