@@ -21,7 +21,7 @@ def main():
         if current in seen:
             break
         seen[current] = i
-    result = [k for k, v in seen.items() if v == (1_000_000-1) % len(seen)][0]
+    result = [k for k, v in seen.items() if v == (1_000_000 - 1) % len(seen)][0]
     print(f"{result=}")
     submit(result, part=PART, day=DAY, year=YEAR)
 

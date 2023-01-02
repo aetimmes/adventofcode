@@ -4,23 +4,25 @@ from aocd import get_data, submit
 
 YEAR = 2017
 DAY = 17
-PART = "a"
+PART = "b"
 
 
 def main():
-    """Part a."""
+    """Part b."""
     data = int(get_data(day=DAY, year=YEAR))
     print(f"{data=}")
 
-    elements = [0]
+    result = 0
+    size = 1
     pos = 0
-    for i in range(2017):
+    for i in range(50_000_000):
         pos += data
-        pos %= len(elements)
-        elements.insert(pos + 1, i + 1)
+        pos %= size
+        if pos == 0:
+            result = i + 1
+        size += 1
         pos += 1
 
-    result = elements[pos + 1]
     print(f"{result=}")
     submit(result, part=PART, day=DAY, year=YEAR)
 
