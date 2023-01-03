@@ -11,7 +11,7 @@ def main():
     """Part b."""
     data = [int(x) for x in get_data(day=DAY, year=YEAR).split()]
     print(f"{data=}")
-
+    seen = set()
     for _ in [1, 2]:
         seen = set()
         while tuple(data) not in seen:
