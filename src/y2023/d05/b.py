@@ -21,7 +21,6 @@ def main():
     result = -1
     while True:
         result += 1
-        print(f"trying {result}")
         current = result
         for m in maps[::-1]:
             for dst, src, rng in m:
