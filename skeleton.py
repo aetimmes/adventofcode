@@ -1,22 +1,45 @@
-#!/usr/bin/python3.11
-"""2022 day FIXME."""
-from aocd import get_data, submit
-from aocd.transforms import lines
+#!/usr/bin/python3.12
+"""2023 day FIXME."""
+from aocd.models import Puzzle
 
-YEAR = 2022
+YEAR = 2023
 DAY = -1  # FIX ME
-PART = "a"
 
 
 def main():
-    """Part a."""
-    data = lines(get_data(day=DAY, year=YEAR))
-    print(f"{data=}")
+    """Main."""
 
-    result = 0
+    def a(data):
+        """Part a."""
+        print(f"{data=}")
 
-    print(f"{result=}")
-    submit(result, part=PART, day=DAY, year=YEAR)
+    def b(data):
+        """Part b."""
+        print(f"{data=}")
+
+    puzzle = Puzzle(year=YEAR, day=DAY)
+
+    wrong = False
+    for i, ex in enumerate(puzzle.examples):
+        answer = a(ex.input_data)
+        if answer != ex.answer_a:
+            print(f"Example data mismatch: {ex.answer_a=}, {answer=}")
+            wrong = True
+
+    if wrong and input("Example data mismatch; submit anyways? [y/N]:").lower().strip() != "y":
+        exit()
+    puzzle.answer_a = a(puzzle.input_data)
+
+    wrong = False
+    for i, ex in enumerate(puzzle.examples):
+        answer = a(ex.input_data)
+        if answer != ex.answer_b:
+            print(f"Example data mismatch: {ex.answer_b=}, {answer=}")
+            wrong = True
+
+    if wrong and input("Example data mismatch; submit anyways? [y/N]:").lower().strip() != "y":
+        exit()
+    puzzle.answer_b = b(puzzle.input_data)
 
 
 if __name__ == "__main__":
