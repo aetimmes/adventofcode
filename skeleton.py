@@ -22,7 +22,7 @@ def main():
     for part in ("a", "b"):
         for i, ex in enumerate(puzzle.examples):
             try:
-                answer = locals[part](ex.input_data)
+                answer = locals()[part](ex.input_data)
                 if (str(answer) != getattr(ex, f"answer_{part}")) and input(
                     f"Example data mismatch: {getattr(ex, f'answer_{part}')=}, {answer=}; submit anyways? [y/N]:"
                 ).lower().strip() != "y":
@@ -36,8 +36,9 @@ def main():
                     != "y"
                 ):
                     raise
-
-        setattr(puzzle, f"answer_{part}", locals()[part](puzzle.input_data))
+        answer = locals()[part](puzzle.input_data)
+        print(f"{answer=}")
+        setattr(puzzle, f"answer_{part}", answer)
 
 
 if __name__ == "__main__":
