@@ -19,45 +19,24 @@ def main():
 
     puzzle = Puzzle(year=YEAR, day=DAY)
 
-    wrong = False
-    for i, ex in enumerate(puzzle.examples):
-        try:
-            answer = a(ex.input_data)
-        except Exception as e:
-            print("Example data exception: %s" % str(e))
-            wrong = True
-            answer = ""
-        if str(answer) != ex.answer_a:
-            print(f"Example data mismatch: {ex.answer_a=}, {answer=}")
-            wrong = True
+    for part in ("a", "b"):
+        for i, ex in enumerate(puzzle.examples):
+            try:
+                answer = locals[part](ex.input_data)
+                if (
+                    (str(answer) != ex.getattr(f"answer_{part}")) and
+                    input(f"Example data mismatch: {ex.getattr(f'answer_{part}')=}, {answer=}; submit anyways? [y/N]:").lower().strip() != "y"
+                ):
+                    exit()
+            except Exception as e:
+                print("Example data exception: %s" % str(e))
+                if input("Example data exception; submit anyways? [y/N]:").lower().strip() != "y":
+                    raise
 
-    if (
-        wrong
-        and input("Example data mismatch; submit anyways? [y/N]:").lower().strip()
-        != "y"
-    ):
-        exit()
-    puzzle.answer_a = a(puzzle.input_data)
-
-    wrong = False
-    for i, ex in enumerate(puzzle.examples):
-        try:
-            answer = b(ex.input_data)
-        except Exception as e:
-            print("Example data exception: %s" % str(e))
-            wrong = True
-            answer = ""
-        if str(answer) != ex.answer_b:
-            print(f"Example data mismatch: {ex.answer_b=}, {answer=}")
-            wrong = True
-
-    if (
-        wrong
-        and input("Example data mismatch; submit anyways? [y/N]:").lower().strip()
-        != "y"
-    ):
-        exit()
-    puzzle.answer_b = b(puzzle.input_data)
+        if part == a:
+            puzzle.answer_a = a(puzzle.input_data)
+        else:
+            puzzle.answer_b = b(puzzle.input_data)
 
 
 if __name__ == "__main__":
