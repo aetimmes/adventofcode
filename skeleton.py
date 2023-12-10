@@ -21,23 +21,41 @@ def main():
 
     wrong = False
     for i, ex in enumerate(puzzle.examples):
-        answer = a(ex.input_data)
+        try:
+            answer = a(ex.input_data)
+        except Exception as e:
+            print("Example data exception: %s" % str(e))
+            wrong = True
+            answer = ""
         if str(answer) != ex.answer_a:
             print(f"Example data mismatch: {ex.answer_a=}, {answer=}")
             wrong = True
 
-    if wrong and input("Example data mismatch; submit anyways? [y/N]:").lower().strip() != "y":
+    if (
+        wrong
+        and input("Example data mismatch; submit anyways? [y/N]:").lower().strip()
+        != "y"
+    ):
         exit()
     puzzle.answer_a = a(puzzle.input_data)
 
     wrong = False
     for i, ex in enumerate(puzzle.examples):
-        answer = b(ex.input_data)
+        try:
+            answer = b(ex.input_data)
+        except Exception as e:
+            print("Example data exception: %s" % str(e))
+            wrong = True
+            answer = ""
         if str(answer) != ex.answer_b:
             print(f"Example data mismatch: {ex.answer_b=}, {answer=}")
             wrong = True
 
-    if wrong and input("Example data mismatch; submit anyways? [y/N]:").lower().strip() != "y":
+    if (
+        wrong
+        and input("Example data mismatch; submit anyways? [y/N]:").lower().strip()
+        != "y"
+    ):
         exit()
     puzzle.answer_b = b(puzzle.input_data)
 
