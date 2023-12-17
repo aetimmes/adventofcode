@@ -55,6 +55,7 @@ def main():
     def b(data):
         """Part b."""
         print("\n".join(data.splitlines()))
+        print("THIS IS BROKEN BUT I FORGET HOW THE ORIGINAL WORKED AND I'M NOT FIXING IT")
         grid = data.splitlines()
         mins = {}
         q = deque([])
