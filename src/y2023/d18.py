@@ -13,6 +13,21 @@ DIRS = {
     "D": (1,0)
 }
 
+def print_dig(dug):
+    min_r = min(x[0] for x in dug)
+    min_c = min(x[1] for x in dug)
+    max_r = max(x[0] for x in dug)
+    max_c = max(x[1] for x in dug)
+    for r in range(min_r, max_r+1):
+        row = ""
+        for c in range(min_c, max_c+1):
+            if (r, c) in dug:
+                row += "#"
+            else:
+                row += "."
+        print(row)
+    print(f"{min_r=}, {max_r=}, {min_c=}, {max_c=}")
+
 def main():
     """Main."""
 
@@ -33,6 +48,7 @@ def main():
         min_c = min(x[1] for x in dug)
         max_r = max(x[0] for x in dug)
         max_c = max(x[1] for x in dug)
+        print_dig(dug)
 
         outside = set()
         orig_dug = deepcopy(dug)
@@ -43,10 +59,16 @@ def main():
                 nr, nc = (r+d[0], c+d[1])
                 stack = [(nr, nc)]
                 print("checking new stack", stack[-1])
+                print()
                 while stack and not bad:
                     current = stack.pop()
                     print("checking", current)
                     (nr, nc) = current
+                    if (nr < min_r) or (nr > max_r) or (nc < min_c) or (nc > max_c):
+                        print(current, "new outside")
+                        outside = outside.union(seen)
+                        bad = True
+                        break
                     if current in dug:
                         print(current, "dug")
                         continue
@@ -54,11 +76,6 @@ def main():
                         print(current, "seen")
                         continue
                     seen.add(current)
-                    if (nr < min_r) or (nr > max_r) or (nc < min_c) or (nc > max_c):
-                        print(current, "new outside")
-                        outside = outside.union(seen)
-                        bad = True
-                        break
                     if (nr,nc) in outside:
                         print(current, "existing outside")
                         outside = outside.union(seen)
@@ -69,22 +86,8 @@ def main():
                 if not bad:
                     print(current, "inside")
                     dug = dug.union(seen)
-        
-        print(f"{min_r=}, {max_r=}, {min_c=}, {max_c=}")
-        for r in range(min_r, max_r+1):
-            row = ""
-            for c in range(min_c, max_c+1):
-                if (r, c) in dug:
-                    row += "#"
-                else:
-                    row += "."
-            print(row)
-
-
+        print_dig(dug)
         return len(dug)
-
-
-
 
     def b(data):
         """Part b."""
