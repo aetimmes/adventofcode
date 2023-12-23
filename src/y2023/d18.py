@@ -6,21 +6,18 @@ from aocd.models import Puzzle
 YEAR = 2023
 DAY = 18
 
-DIRS = {
-    "R": (0,1),
-    "L": (0,-1),
-    "U": (-1,0),
-    "D": (1,0)
-}
+
+DIRS = {"R": (0, 1), "L": (0, -1), "U": (-1, 0), "D": (1, 0)}
+D_LIST = "RDLU"
 
 def print_dig(dug):
     min_r = min(x[0] for x in dug)
     min_c = min(x[1] for x in dug)
     max_r = max(x[0] for x in dug)
     max_c = max(x[1] for x in dug)
-    for r in range(min_r, max_r+1):
+    for r in range(min_r, max_r + 1):
         row = ""
-        for c in range(min_c, max_c+1):
+        for c in range(min_c, max_c + 1):
             if (r, c) in dug:
                 row += "#"
             else:
@@ -28,13 +25,51 @@ def print_dig(dug):
         print(row)
     print(f"{min_r=}, {max_r=}, {min_c=}, {max_c=}")
 
+
+def dig_dug(dug):
+    min_r = min(x[0] for x in dug)
+    min_c = min(x[1] for x in dug)
+    max_r = max(x[0] for x in dug)
+    max_c = max(x[1] for x in dug)
+
+    outside = set()
+    orig_dug = deepcopy(dug)
+    for r, c in orig_dug:
+        for d in DIRS.values():
+            seen = set()
+            bad = False
+            nr, nc = (r + d[0], c + d[1])
+            stack = [(nr, nc)]
+            while stack and not bad:
+                current = stack.pop()
+                (nr, nc) = current
+                if (nr < min_r) or (nr > max_r) or (nc < min_c) or (nc > max_c):
+                    outside = outside.union(seen)
+                    bad = True
+                    break
+                if current in dug:
+                    continue
+                if current in seen:
+                    continue
+                seen.add(current)
+                if (nr, nc) in outside:
+                    outside = outside.union(seen)
+                    bad = True
+                    break
+                for nd in DIRS.values():
+                    stack.append((nr + nd[0], nc + nd[1]))
+            if not bad:
+                dug = dug.union(seen)
+    return dug
+
+
 def main():
     """Main."""
 
     def a(data):
         """Part a."""
-        print('\n'.join(data.splitlines()))
-        p = (0,0)
+        print("\n".join(data.splitlines()))
+        p = (0, 0)
         dug = set()
         for line in data.splitlines():
             d, c = line.split()[:2]
@@ -43,55 +78,26 @@ def main():
                 dug.add(p)
                 p = (p[0] + DIRS[d][0], p[1] + DIRS[d][1])
         dug.add(p)
-
-        min_r = min(x[0] for x in dug)
-        min_c = min(x[1] for x in dug)
-        max_r = max(x[0] for x in dug)
-        max_c = max(x[1] for x in dug)
-        print_dig(dug)
-
-        outside = set()
-        orig_dug = deepcopy(dug)
-        for r, c in orig_dug:
-            for d in DIRS.values():
-                seen = set()
-                bad = False
-                nr, nc = (r+d[0], c+d[1])
-                stack = [(nr, nc)]
-                print("checking new stack", stack[-1])
-                print()
-                while stack and not bad:
-                    current = stack.pop()
-                    print("checking", current)
-                    (nr, nc) = current
-                    if (nr < min_r) or (nr > max_r) or (nc < min_c) or (nc > max_c):
-                        print(current, "new outside")
-                        outside = outside.union(seen)
-                        bad = True
-                        break
-                    if current in dug:
-                        print(current, "dug")
-                        continue
-                    if current in seen:
-                        print(current, "seen")
-                        continue
-                    seen.add(current)
-                    if (nr,nc) in outside:
-                        print(current, "existing outside")
-                        outside = outside.union(seen)
-                        bad = True
-                        break
-                    for nd in DIRS.values():
-                        stack.append((nr+nd[0], nc+nd[1]))
-                if not bad:
-                    print(current, "inside")
-                    dug = dug.union(seen)
+        dug = dig_dug(dug)
         print_dig(dug)
         return len(dug)
 
     def b(data):
         """Part b."""
-        print('\n'.join(data.splitlines()))
+        print("\n".join(data.splitlines()))
+        p = (0, 0)
+        dug = set()
+        for line in data.splitlines():
+            c, d = line.split()[-1][2:-2], line.split()[-1][-2]
+            c = int(c, 16)
+            d = int(d)
+            for _ in range(c):
+                dug.add(p)
+                p = (p[0] + DIRS[D_LIST[d]][0], p[1] + DIRS[D_LIST[d]][1])
+        dug.add(p)
+        dug = dig_dug(dug)
+        print_dig(dug)
+        return len(dug)
 
     puzzle = Puzzle(year=YEAR, day=DAY)
 
