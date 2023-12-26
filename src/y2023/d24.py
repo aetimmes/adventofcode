@@ -76,8 +76,7 @@ def main():
 
     puzzle = Puzzle(year=YEAR, day=DAY)
 
-    #for part in ("a", "b"):
-    for part in ("b"):
+    for part in ("a", "b"):
         for i, ex in enumerate(puzzle.examples):
             try:
                 answer = locals()[part](ex.input_data)
