@@ -1,9 +1,15 @@
 #!/usr/bin/python3.12
 """2023 day 19."""
+from collections import deque
+import copy
 from aocd.models import Puzzle
 
 YEAR = 2023
 DAY = 19
+
+
+def isvalid(r):
+    return all(1 <= r[i][0] <= r[i][1] <= 4000 for i in "xmas")
 
 
 def main():
@@ -60,6 +66,64 @@ def main():
     def part_b(data):
         """Part b."""
         print('\n'.join(data.splitlines()))
+        r, p = data.split("\n\n")
+        rules = {}
+        result = 0
+        for line in r.splitlines():
+            ls, rs = line.split("{")
+            rules[ls] = rs[:-1].split(",")
+        
+        result = 0
+        d = deque()
+        solutions = list()
+        d.append({"x":[1,4000],"m":[1,4000],"a":[1,4000],"s":[1,4000],"r":"in"})
+        while d:
+            c = d.popleft()
+            if not isvalid(c):
+                continue
+            for claus in rules[c[r]].split(","):
+                if claus == "A":
+                    solutions.add(copy.deepcopy(c))
+                    break
+                elif claus == "R":
+                    break
+                elif "<" in claus:
+                    ls, rs = claus.split(":")
+                    ll, lr = ls.split("<")
+                    nc = copy.deepcopy(c)
+                    nc[ll][1] = min(nc[ll][1], int(lr))
+                    if isvalid(nc):
+                        if rs == "A":
+                                solutions.add(nc)
+                        elif rs != "R":
+                            nc[r] = rs
+                            d.append(nc)
+                    c[ll][0] = max(c[ll][0], int(lr))
+                elif ">" in claus:
+                    ls, rs = claus.split(":")
+                    ll, lr = ls.split("<")
+                    nc = copy.deepcopy(c)
+                    nc[ll][0] = max(nc[ll][0], int(lr))
+                    if isvalid(nc):
+                        if rs == "A":
+                                solutions.add(nc)
+                        elif rs != "R":
+                            nc[r] = rs
+                            d.append(nc)
+                    c[ll][1] = min(c[ll][1], int(lr))
+                else:
+                    c[r] = claus
+                    d.append(c)
+        for s in solutions:
+            r = 1
+            for c in "xmas":
+                r *= s[c] 
+            result += r
+        return result
+
+                
+
+
 
     puzzle = Puzzle(year=YEAR, day=DAY)
 

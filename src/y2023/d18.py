@@ -10,22 +10,6 @@ DAY = 18
 DIRS = {"R": (0, 1), "L": (0, -1), "U": (-1, 0), "D": (1, 0)}
 D_LIST = "RDLU"
 
-def print_dig(dug):
-    min_r = min(x[0] for x in dug)
-    min_c = min(x[1] for x in dug)
-    max_r = max(x[0] for x in dug)
-    max_c = max(x[1] for x in dug)
-    for r in range(min_r, max_r + 1):
-        row = ""
-        for c in range(min_c, max_c + 1):
-            if (r, c) in dug:
-                row += "#"
-            else:
-                row += "."
-        print(row)
-    print(f"{min_r=}, {max_r=}, {min_c=}, {max_c=}")
-
-
 def dig_dug(dug):
     min_r = min(x[0] for x in dug)
     min_c = min(x[1] for x in dug)
@@ -79,29 +63,34 @@ def main():
                 p = (p[0] + DIRS[d][0], p[1] + DIRS[d][1])
         dug.add(p)
         dug = dig_dug(dug)
-        print_dig(dug)
         return len(dug)
 
     def b(data):
         """Part b."""
         print("\n".join(data.splitlines()))
         p = (0, 0)
-        dug = set()
+        ps = []
+        perimeter = 0
         for line in data.splitlines():
             c, d = line.split()[-1][2:-2], line.split()[-1][-2]
             c = int(c, 16)
             d = int(d)
-            for _ in range(c):
-                dug.add(p)
-                p = (p[0] + DIRS[D_LIST[d]][0], p[1] + DIRS[D_LIST[d]][1])
-        dug.add(p)
-        dug = dig_dug(dug)
-        print_dig(dug)
-        return len(dug)
+            p = (p[0] + DIRS[D_LIST[d]][0] * c, p[1] + DIRS[D_LIST[d]][1] * c)
+            ps.append(p)
+            perimeter += c
+            print(line, "RDLU"[d], c, p, ps)
+        result = 0
+        for (p1, p2) in zip(ps, ps[1:] + [ps[0]]):
+            result += ((p1[0] * p2[1]) - (p2[0] * p1[1]))
+            print(p1, p2, result)
+        result = abs(result // 2)
+        result += perimeter // 2
+        return abs(result+1)
 
     puzzle = Puzzle(year=YEAR, day=DAY)
 
-    for part in ("a", "b"):
+    #for part in ("a", "b"):
+    for part in ("b"):
         for i, ex in enumerate(puzzle.examples):
             try:
                 answer = locals()[part](ex.input_data)
