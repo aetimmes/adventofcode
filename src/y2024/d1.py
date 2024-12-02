@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""2024 day FIXME."""
+"""2024 day 1."""
 from aocd.models import Puzzle
+from collections import Counter
 
 YEAR = 2024
-DAY = FIXME
+DAY = 1
 
 
 def main():
@@ -12,10 +13,33 @@ def main():
     def a(data):
         """Part a."""
         print('\n'.join(data.splitlines()))
+        l, r = [], []
+        for line in data.splitlines():
+            line = list(map(int, line.split()))
+            l.append(line[0])
+            r.append(line[1])
+        l = sorted(l)
+        r = sorted(r)
+        result = 0
+        for i in range(len(l)):
+            result += abs(l[i] - r[i])
+        return result
+            
 
     def b(data):
         """Part b."""
         print('\n'.join(data.splitlines()))
+        l, r = [], []
+        for line in data.splitlines():
+            line = list(map(int, line.split()))
+            l.append(line[0])
+            r.append(line[1])
+
+        c = Counter(r)
+        result = 0
+        for i in l:
+            result += i * c[i]
+        return result
 
     puzzle = Puzzle(year=YEAR, day=DAY)
 
