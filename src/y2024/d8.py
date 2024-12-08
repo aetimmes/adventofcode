@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """2024 day 8."""
+from collections import defaultdict
 from aocd.models import Puzzle
 
 YEAR = 2024
@@ -12,10 +13,52 @@ def main():
     def a(data):
         """Part a."""
         print('\n'.join(data.splitlines()))
+        antennae = defaultdict(list)
+        lines = data.splitlines()
+        mr = len(lines)
+        mc = len(lines[0])
+        for r, line in enumerate(lines):
+            for c, char in enumerate(line):
+                if char != '.':
+                    antennae[char].append((r,c,))
+
+        antinodes = set()
+
+        for char in antennae:
+            for i, (r1,c1) in enumerate(antennae[char]):
+                for (r2,c2) in antennae[char][:i] + antennae[char][i+1:]:
+                    if (0 <= (2*r1-r2) < mr) and (0 <= (2*c1-c2) < mc):
+                        antinodes.add((2*r1-r2,2*c1-c2,))
+        print(antinodes)
+        return len(antinodes)
 
     def b(data):
         """Part b."""
         print('\n'.join(data.splitlines()))
+        antennae = defaultdict(list)
+        lines = data.splitlines()
+        mr = len(lines)
+        mc = len(lines[0])
+        for r, line in enumerate(lines):
+            for c, char in enumerate(line):
+                if char != '.':
+                    antennae[char].append((r,c,))
+
+        antinodes = set()
+
+        for char in antennae:
+            for i, (r1,c1) in enumerate(antennae[char]):
+                for (r2,c2) in antennae[char][:i] + antennae[char][i+1:]:
+                    antinodes.add((r2,c2,))
+                    dr = r1-r2
+                    dc = c1-c2
+                    cr, cc = r1+dr, c1+dc
+                    while (0 <= cr < mr) and (0 <= cc < mc):
+                        antinodes.add((cr,cc,))
+                        cr += dr
+                        cc += dc
+        print(antinodes)
+        return len(antinodes)
 
     puzzle = Puzzle(year=YEAR, day=DAY)
 
