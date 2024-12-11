@@ -35,22 +35,34 @@ def main():
             result += i * n
         return result
 
-
     def b(data):
         """Part b."""
         print('\n'.join(data.splitlines()))
+        files = []
         spaces = []
-        locs = []
-        l = 0
+        pos = 0
         for i, c in enumerate(data.strip()):
-            if i%2==0:
-                locs.append((l,int(c),))
+            if i % 2 == 0:
+                files.append((i//2, pos, int(c),))
             else:
-                spaces.append((l, int(c),))
-            l += int(c)
-        
-        for loc in locs[::-1]:
+                spaces.append((pos, int(c),))
+            pos += int(c)
 
+        n_files = []
+        for (i, p, l) in files[::-1]:
+            found = False
+            for si, (sp, sl) in enumerate(spaces):
+                if sp > p:
+                    break
+                if sl >= l:
+                    n_files.append((i, sp, l))
+                    spaces[si] = (sp+l, sl-l)
+                    found = True
+                    break
+            if not found:
+                n_files.append((i, p, l))
+
+        return sum(i * sum(range(p, p+l)) for (i, p, l) in n_files)
 
     puzzle = Puzzle(year=YEAR, day=DAY)
 
