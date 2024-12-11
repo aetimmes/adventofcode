@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """2024 day 10."""
+from collections import deque
 from aocd.models import Puzzle
 
 YEAR = 2024
 DAY = 10
+
+DS = {(1, 0), (0, 1), (-1, 0), (0, -1)}
 
 
 def main():
@@ -11,12 +14,47 @@ def main():
 
     def a(data):
         """Part a."""
-        print('\n'.join(data.splitlines()))
+        print("\n".join(data.splitlines()))
+        m = {x: set() for x in range(10)}
+        for r, line in enumerate(data.splitlines()):
+            for c, char in enumerate(line):
+                m[int(char)].add((r, c,))
+
+        result = 0
+        for r, c in m[0]:
+            seen = set()
+            stack = deque()
+            stack.append((r, c, 0,))
+            while stack:
+                (r, c, n) = stack.popleft()
+                seen.add((r, c, n))
+                for dr, dc in DS:
+                    if (r + dr, c + dc) in m.get(n + 1, {}):
+                        stack.append((r + dr, c + dc, n + 1))
+            result += len([s for s in seen if s[2] == 9])
+        return result
 
     def b(data):
         """Part b."""
-        print('\n'.join(data.splitlines()))
+        print("\n".join(data.splitlines()))
+        m = {x: set() for x in range(10)}
+        for r, line in enumerate(data.splitlines()):
+            for c, char in enumerate(line):
+                m[int(char)].add((r, c,))
 
+        result = 0
+        for r, c in m[0]:
+            stack = deque()
+            stack.append((r, c, 0,))
+            while stack:
+                (r, c, n) = stack.pop()
+                if n == 9:
+                    result+=1
+                    continue
+                for dr, dc in DS:
+                    if (r + dr, c + dc) in m.get(n + 1, {}):
+                        stack.append((r + dr, c + dc, n + 1))
+        return result
     puzzle = Puzzle(year=YEAR, day=DAY)
 
     for part in ("a", "b"):

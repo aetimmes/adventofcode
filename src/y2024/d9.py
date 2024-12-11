@@ -12,10 +12,45 @@ def main():
     def a(data):
         """Part a."""
         print('\n'.join(data.splitlines()))
+        nums = []
+        dots = 0
+        for i, c in enumerate(data.strip()):
+            for _ in range(int(c)):
+                if i % 2 == 0:
+                    nums.append(i//2)
+                else:
+                    nums.append('.')
+                    dots += 1
+        l = 0
+        while dots > 0:
+            c = nums.pop()
+            if c != '.':
+                while nums[l] != '.':
+                    l += 1
+                nums[l] = c
+            dots -= 1
+
+        result = 0
+        for i, n in enumerate(nums):
+            result += i * n
+        return result
+
 
     def b(data):
         """Part b."""
         print('\n'.join(data.splitlines()))
+        spaces = []
+        locs = []
+        l = 0
+        for i, c in enumerate(data.strip()):
+            if i%2==0:
+                locs.append((l,int(c),))
+            else:
+                spaces.append((l, int(c),))
+            l += int(c)
+        
+        for loc in locs[::-1]:
+
 
     puzzle = Puzzle(year=YEAR, day=DAY)
 
