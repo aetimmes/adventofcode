@@ -5,6 +5,12 @@ from aocd.models import Puzzle
 YEAR = 2024
 DAY = 15
 
+DS = {
+    '<': -1j,
+    '^': -1,
+    '>': 1j,
+    'v': 1
+}
 
 def main():
     """Main."""
@@ -12,6 +18,35 @@ def main():
     def a(data):
         """Part a."""
         print('\n'.join(data.splitlines()))
+        walls = set()
+        blocks = set()
+        data, steps = data.split("\n\n")
+        for r, line in enumerate(data.splitlines()):
+            for c, ch in enumerate(line.strip()):
+                if ch == '#':
+                    walls.add(r+c*1j)
+                elif ch == 'O':
+                    blocks.add(r+c*1j)
+                elif ch == '@':
+                    robot = r+c*1j
+        for s in "".join(steps.splitlines()):
+            if robot+DS[s] in walls:
+                continue
+            elif robot+DS[s] not in blocks:
+                robot += DS[s]
+            else:
+                curr = robot+DS[s]
+                while curr in blocks:
+                    curr += DS[s]
+                if curr in walls:
+                    continue
+                blocks.remove(robot+DS[s])
+                blocks.add(curr)
+                robot += DS[s]
+        return int(sum(100*b.real + b.imag for b in blocks))
+
+
+
 
     def b(data):
         """Part b."""
