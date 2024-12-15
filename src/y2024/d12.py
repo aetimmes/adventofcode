@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """2024 day 12."""
+from collections import deque
 from aocd.models import Puzzle
+from copy import deepcopy
 
 YEAR = 2024
 DAY = 12
 
+DS = {1,-1,1j,-1j}
 
 def main():
     """Main."""
@@ -12,6 +15,30 @@ def main():
     def a(data):
         """Part a."""
         print('\n'.join(data.splitlines()))
+        m = dict()
+        for r, line in enumerate(data.splitlines()):
+            for c, cha in enumerate(line):
+                m[r+c*1j] = cha
+        om = deepcopy(m)
+        result = 0
+        while m:
+            s = deque()
+            (rc) = list(m.keys())[0]
+            t = m.pop(rc)
+            s.append(rc)
+            a,p = 0,0
+            while s:
+                rc = s.pop()
+                a+=1
+                for d in DS:
+                    if m.get(rc+d) == t:
+                        s.append(rc+d)
+                        m.pop(rc+d)
+                    elif om.get(rc+d) != t:
+                        p+=1
+            result += a*p
+        return result
+
 
     def b(data):
         """Part b."""
